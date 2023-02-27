@@ -1,6 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 function App() {
+
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+
+
+
+    const makeAPICall = async () => {
+        try {
+            const response = await fetch('http://192.168.69.75/data');
+            
+            const data = await response.json();
+            console.log({ data })
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+    useEffect(() => {
+        makeAPICall();
+    }, [])
+
+    // useEffect(() => {
+    //     fetch(`http://192.168.69.75/data`, { mode: 'cors' })
+    //         .then((response) => {
+    //             if (!response.ok) {
+    //                 throw new Error(
+    //                     `This is an HTTP error: The status is ${response.status}`
+    //                 );
+    //             }
+    //             return response.json();
+    //         })
+    //         .then((actualData) => console.log(actualData))
+    //         .catch((err) => {
+    //             console.log(err.message);
+    //         });
+    // }, []);
+
+
+
 
     let currentTemp = 25;
     let maxTemp = 27;

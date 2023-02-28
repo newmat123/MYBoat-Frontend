@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 function App() {
-
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    const [currentTemp, setCTemp] = useState(0);
-
-    let maxTemp = 27;
-
-    let currentHumidity = 10;
-    let maxHumidity = 20;
-
-    let waterInBilge = false;
+    const [waterInBilge, setWater] = useState(false);
+    const [currentTemp, setTemp] = useState(0);
+    const [maxTemp, setMaxTemp] = useState(0);
+    // const [currentHumidity, setHumidity] = useState(0);
+    // const [maxHumidity, setMaxHumidity] = useState(0);
 
 
     const makeAPICall = async () => {
@@ -21,9 +13,10 @@ function App() {
             const response = await fetch('http://192.168.1.1/data');
             
             const data = await response.json();
-            console.log({ data });
-            console.log(data[0].value);
-            setCTemp(data[0].value);
+            // console.log({ data });
+            // console.log(data[0].value);
+            setTemp(data[0].value);
+            setMaxTemp(data[0].value2);
         }
         catch (e) {
             console.log(e)
@@ -32,22 +25,6 @@ function App() {
     useEffect(() => {
         makeAPICall();
     }, [])
-
-    // useEffect(() => {
-    //     fetch(`http://192.168.69.75/data`, { mode: 'cors' })
-    //         .then((response) => {
-    //             if (!response.ok) {
-    //                 throw new Error(
-    //                     `This is an HTTP error: The status is ${response.status}`
-    //                 );
-    //             }
-    //             return response.json();
-    //         })
-    //         .then((actualData) => console.log(actualData))
-    //         .catch((err) => {
-    //             console.log(err.message);
-    //         });
-    // }, []);
 
     return (
         <div className="flex justify-center bg-slate-400 min-h-screen">
@@ -83,7 +60,7 @@ function App() {
                         </canvas> */}
                     </div>
 
-                    <div className="mt-12 text-center">
+                    {/* <div className="mt-12 text-center">
                         <h3 className="text-4xl font-bold text-gray-700">Fugt {currentHumidity} c<sup>o</sup></h3>
                         <div className="my-8">
                             <h1 className="text-2xl font-bold text-gray-800">Top {maxHumidity} c<sup>o</sup></h1>
@@ -91,8 +68,8 @@ function App() {
                         </div>
                         {/* <canvas>
 
-                        </canvas> */}
-                    </div>
+                        </canvas> 
+                    </div> */}
 
                 </div>
 

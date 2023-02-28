@@ -6,15 +6,24 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [currentTemp, setCTemp] = useState(0);
 
+    let maxTemp = 27;
+
+    let currentHumidity = 10;
+    let maxHumidity = 20;
+
+    let waterInBilge = false;
 
 
     const makeAPICall = async () => {
         try {
-            const response = await fetch('http://192.168.69.75/data');
+            const response = await fetch('http://192.168.1.1/data');
             
             const data = await response.json();
-            console.log({ data })
+            console.log({ data });
+            console.log(data[0].value);
+            setCTemp(data[0].value);
         }
         catch (e) {
             console.log(e)
@@ -39,17 +48,6 @@ function App() {
     //             console.log(err.message);
     //         });
     // }, []);
-
-
-
-
-    let currentTemp = 25;
-    let maxTemp = 27;
-
-    let currentHumidity = 10;
-    let maxHumidity = 20;
-
-    let waterInBilge = true;
 
     return (
         <div className="flex justify-center bg-slate-400 min-h-screen">

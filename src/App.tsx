@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 function App() {
+    const [ssid, setSsid] = useState("");
+    const [pwd, setPwd] = useState("");
+
     const [waterInBilge, setWater] = useState(false);
     const [currentTemp, setTemp] = useState(0);
     const [maxTemp, setMaxTemp] = useState(0);
@@ -11,7 +14,7 @@ function App() {
     const makeAPICall = async () => {
         try {
             const response = await fetch('http://192.168.1.1/data');
-            
+
             const data = await response.json();
             // console.log({ data });
             // console.log(data[0].value);
@@ -25,6 +28,17 @@ function App() {
     useEffect(() => {
         makeAPICall();
     }, [])
+
+    const handleSubmit = () => {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ SSID: ssid, PWD: pwd })
+        };
+        fetch('http://192.168.1.1/wifi', requestOptions)
+            .then(response => response.json())
+            //.then(data => setPostId(data.id));
+    }
 
     return (
         <div className="flex justify-center bg-slate-400 min-h-screen">
@@ -58,6 +72,29 @@ function App() {
                         {/* <canvas>
 
                         </canvas> */}
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <h3 className="text-4xl font-bold text-gray-700">Connect to network</h3>
+
+                        <form className="my-8 flex flex-col" onSubmit={handleSubmit}>
+                            <label>Wifi name:
+                                <input
+                                    type="text"
+                                    value={ssid}
+                                    onChange={(e) => setSsid(e.target.value)}
+                                />
+                            </label>
+                            <label>Password:
+                                <input
+                                    type="text"
+                                    value={pwd}
+                                    onChange={(e) => setPwd(e.target.value)}
+                                />
+                            </label>
+                            <input type="submit" className="bg-slate-700 rounded-md" />
+                        </form>
+
                     </div>
 
                     {/* <div className="mt-12 text-center">

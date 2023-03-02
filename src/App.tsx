@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
     const [ssid, setSsid] = useState("");
@@ -29,15 +30,25 @@ function App() {
         makeAPICall();
     }, [])
 
-    const handleSubmit = () => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ SSID: ssid, PWD: pwd })
-        };
-        fetch('http://192.168.1.1/wifi', requestOptions)
-            .then(response => response.json())
-            //.then(data => setPostId(data.id));
+    const handleSubmit = async () => {
+        await axios.post('http://192.168.1.1/wifi', {
+            SSID: ssid,
+            PWD: pwd
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        // const requestOptions = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ SSID: ssid, PWD: pwd })
+        // };
+        // await fetch('http://192.168.1.1/wifi', requestOptions)
+        //     .then(response => response.json())
+        //     //.then(data => setPostId(data.id));
     }
 
     return (
@@ -77,7 +88,7 @@ function App() {
                     <div className="mt-12 text-center">
                         <h3 className="text-4xl font-bold text-gray-700">Connect to network</h3>
 
-                        <form className="my-8 flex flex-col" onSubmit={handleSubmit}>
+                        <div className="my-8 flex flex-col">
                             <label>Wifi name:
                                 <input
                                     type="text"
@@ -92,8 +103,8 @@ function App() {
                                     onChange={(e) => setPwd(e.target.value)}
                                 />
                             </label>
-                            <input type="submit" className="bg-slate-700 rounded-md" />
-                        </form>
+                            <button onClick={handleSubmit} className="bg-slate-700 rounded-md">submit</button>
+                        </div>
 
                     </div>
 

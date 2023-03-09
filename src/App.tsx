@@ -14,7 +14,7 @@ function App() {
 
     const makeAPICall = async () => {
         try {
-            const response = await fetch('http://192.168.1.1/data');
+            const response = await fetch('http://192.168.69.75/data');
 
             const data = await response.json();
             // console.log({ data });
@@ -31,16 +31,25 @@ function App() {
     }, [])
 
     const handleSubmit = async () => {
-        await axios.post('http://192.168.1.1/wifi', {
+
+        await axios.post('http://192.168.69.75/wifi', {
             SSID: ssid,
             PWD: pwd
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        }, {
+            headers: {
+                // 'application/json' is the modern content-type for JSON, but some
+                // older servers may use 'text/json'.
+                // See: http://bit.ly/text-json
+                'content-type': 'application/json',
+                //'Access-Control-Allow-Origin' : '*'
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         // const requestOptions = {
         //     method: 'POST',
         //     headers: { 'Content-Type': 'application/json' },
@@ -128,3 +137,5 @@ function App() {
 }
 
 export default App;
+
+

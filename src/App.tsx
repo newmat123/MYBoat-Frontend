@@ -17,7 +17,7 @@ function App() {
             const response = await fetch('http://192.168.69.75/data');
 
             const data = await response.json();
-            // console.log({ data });
+            //console.log({ data });
             // console.log(data[0].value);
             setTemp(data[0].value);
             setMaxTemp(data[0].value2);
@@ -31,17 +31,12 @@ function App() {
     }, [])
 
     const handleSubmit = async () => {
-
         await axios.post('http://192.168.69.75/wifi', {
             SSID: ssid,
             PWD: pwd
         }, {
             headers: {
-                // 'application/json' is the modern content-type for JSON, but some
-                // older servers may use 'text/json'.
-                // See: http://bit.ly/text-json
                 'content-type': 'application/json',
-                //'Access-Control-Allow-Origin' : '*'
             }
         })
             .then(function (response) {
@@ -50,14 +45,6 @@ function App() {
             .catch(function (error) {
                 console.log(error);
             });
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ SSID: ssid, PWD: pwd })
-        // };
-        // await fetch('http://192.168.1.1/wifi', requestOptions)
-        //     .then(response => response.json())
-        //     //.then(data => setPostId(data.id));
     }
 
     return (
@@ -137,5 +124,3 @@ function App() {
 }
 
 export default App;
-
-

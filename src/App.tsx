@@ -8,8 +8,10 @@ function App() {
     const [waterInBilge, setWater] = useState(false);
     const [currentTemp, setTemp] = useState(0);
     const [maxTemp, setMaxTemp] = useState(0);
-    // const [currentHumidity, setHumidity] = useState(0);
-    // const [maxHumidity, setMaxHumidity] = useState(0);
+    const [currentHumidity, setHumidity] = useState(0);
+    const [maxHumidity, setMaxHumidity] = useState(0);
+    const [currentHeat, setHeat] = useState(0);
+    const [maxHeat, setMaxHeat] = useState(0);
 
 
     const makeAPICall = async () => {
@@ -17,10 +19,18 @@ function App() {
             const response = await fetch('http://192.168.69.75/data');
 
             const data = await response.json();
-            //console.log({ data });
+            console.log({ data });
             // console.log(data[0].value);
             setTemp(data[0].value);
             setMaxTemp(data[0].value2);
+
+            setHumidity(data[1].value);
+            setMaxHumidity(data[1].value2);
+
+            setHeat(data[2].value);
+            setMaxHeat(data[2].value2);
+
+            setWater(data[3].value);
         }
         catch (e) {
             console.log(e)
@@ -74,6 +84,28 @@ function App() {
                         <h3 className="text-4xl font-bold text-gray-700">Temperature {currentTemp} c<sup>o</sup></h3>
                         <div className="my-8">
                             <h1 className="text-2xl font-bold text-gray-800">Top {maxTemp} c<sup>o</sup></h1>
+                            <span className="text-gray-500">Højeste temp i dag</span>
+                        </div>
+                        {/* <canvas>
+
+                        </canvas> */}
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <h3 className="text-4xl font-bold text-gray-700">Humidity {currentHumidity} %</h3>
+                        <div className="my-8">
+                            <h1 className="text-2xl font-bold text-gray-800">Top {maxHumidity} %</h1>
+                            <span className="text-gray-500">Højeste temp i dag</span>
+                        </div>
+                        {/* <canvas>
+
+                        </canvas> */}
+                    </div>
+
+                    <div className="mt-12 text-center">
+                        <h3 className="text-4xl font-bold text-gray-700">Heat {currentHeat} c<sup>o</sup></h3>
+                        <div className="my-8">
+                            <h1 className="text-2xl font-bold text-gray-800">Top {maxHeat} c<sup>o</sup></h1>
                             <span className="text-gray-500">Højeste temp i dag</span>
                         </div>
                         {/* <canvas>

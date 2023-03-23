@@ -13,7 +13,6 @@ function App() {
     const [currentHeat, setHeat] = useState(0);
     const [maxHeat, setMaxHeat] = useState(0);
 
-
     const makeAPICall = async () => {
         try {
             const response = await fetch('http://192.168.69.75/data');
@@ -21,14 +20,15 @@ function App() {
             const data = await response.json();
             console.log({ data });
             // console.log(data[0].value);
-            setTemp(data[0].value);
-            setMaxTemp(data[0].value2);
+            
+            setTemp(Math.round(data[0].value * 100) / 100);
+            setMaxTemp(Math.round(data[0].value2 * 100) / 100);
 
-            setHumidity(data[1].value);
-            setMaxHumidity(data[1].value2);
+            setHumidity(Math.round(data[1].value * 100) / 100);
+            setMaxHumidity(Math.round(data[1].value2 * 100) / 100);
 
-            setHeat(data[2].value);
-            setMaxHeat(data[2].value2);
+            setHeat(Math.round(data[2].value * 100) / 100);
+            setMaxHeat(Math.round(data[2].value2 * 100) / 100);
 
             setWater(data[3].value);
         }
@@ -60,93 +60,123 @@ function App() {
     return (
         <div className="flex justify-center bg-slate-400 min-h-screen">
 
-            <div className="mt-24 ">
+            <div className="flex flex-col justify-center">
 
-                <div className="border-b-2 border-slate-700 min-w-fit md:min-w-[500px] p-4 text-center">
-                    <h1 className="text-5xl font-bold">BÅDMANEGER</h1>
-                </div>
+                {
+                    waterInBilge &&
 
-                <div className="flex flex-col justify-center">
+                    <div className="mt-12">
+                        <div className="font-regular relative block w-full rounded-lg bg-red-500 p-4 text-base leading-5 text-white opacity-100">Der er detekteret vand i kølen.</div>
+                    </div>
+                }
 
-                    {
-                        waterInBilge &&
-                        <div className="mt-12 text-center bg-red-600 rounded-md p-5 m-5">
-                            <h3 className="text-4xl font-bold text-gray-200">Der Er Vand I Kølen</h3>
-                            <div className="">
-                                <h1 className="text-2xl font-bold text-gray-200">Warning</h1>
-                                <span className="text-gray-300">Skynd dig at få styr på den</span>
+                <div className="w-full  px-4 mx-auto mt-20">
+                    <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg bg-slate-50 bg-opacity-80 rounded-md ">
+                        <div className="rounded-t mb-0 px-4 py-3 border-0">
+                            <div className="flex flex-wrap items-center">
+                                <div className="relative w-full px-4 max-w-full flex-grow flex-1">
+                                    <h3 className="font-semibold text-base text-blueGray-700">
+                                        Boat environment
+                                    </h3>
+                                </div>
+                                <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
+                                    <button onClick={makeAPICall} className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+                                        update
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    }
 
-
-                    <div className="mt-12 text-center">
-                        <h3 className="text-4xl font-bold text-gray-700">Temperature {currentTemp} c<sup>o</sup></h3>
-                        <div className="my-8">
-                            <h1 className="text-2xl font-bold text-gray-800">Top {maxTemp} c<sup>o</sup></h1>
-                            <span className="text-gray-500">Højeste temp i dag</span>
+                        <div className="block w-full overflow-x-auto">
+                            <table className="items-center w-full border-collapse">
+                                <thead className="">
+                                    <tr>
+                                        <th className="px-6 bg-slate-300 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            #
+                                        </th>
+                                        <th className="px-6 bg-slate-300 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                            current
+                                        </th>
+                                        <th className="px-6 bg-slate-300 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px">
+                                            Highest
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                                            Temperature
+                                        </th>
+                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                                            {currentTemp} c<sup>o</sup>
+                                        </td>
+                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            {maxTemp} c<sup>o</sup>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                                            Humidity
+                                        </th>
+                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            {currentHumidity} %
+                                        </td>
+                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            {maxHumidity} %
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                                            Heat
+                                        </th>
+                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            {currentHeat} c<sup>o</sup>
+                                        </td>
+                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                            {maxHeat} c<sup>o</sup>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        {/* <canvas>
-
-                        </canvas> */}
                     </div>
+                </div>
 
-                    <div className="mt-12 text-center">
-                        <h3 className="text-4xl font-bold text-gray-700">Humidity {currentHumidity} %</h3>
-                        <div className="my-8">
-                            <h1 className="text-2xl font-bold text-gray-800">Top {maxHumidity} %</h1>
-                            <span className="text-gray-500">Højeste temp i dag</span>
-                        </div>
-                        {/* <canvas>
+                <div className="relative flex flex-col justify-center bg-slate-50 bg-opacity-80 rounded-md shadow-lg my-14">
+                    <div className="flex flex-col">
 
-                        </canvas> */}
-                    </div>
+                        <div className="mt-5 text-center">
+                            <h3 className="text-4xl font-bold text-gray-700">Connect to wifi</h3>
 
-                    <div className="mt-12 text-center">
-                        <h3 className="text-4xl font-bold text-gray-700">Heat {currentHeat} c<sup>o</sup></h3>
-                        <div className="my-8">
-                            <h1 className="text-2xl font-bold text-gray-800">Top {maxHeat} c<sup>o</sup></h1>
-                            <span className="text-gray-500">Højeste temp i dag</span>
-                        </div>
-                        {/* <canvas>
+                            <div className="my-8 flex flex-col px-5">
+                                <div className="py-1">
+                                    <span className="px-1 text-sm text-gray-600">Wifi name</span>
+                                    <input
+                                        placeholder=""
+                                        value={ssid}
+                                        type="text"
+                                        onChange={(e) => setSsid(e.target.value)}
+                                        className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+                                    />
+                                </div>
+                                <div className="py-1">
+                                    <span className="px-1 text-sm text-gray-600">Password</span>
+                                    <input
+                                        placeholder=""
+                                        value={pwd}
+                                        type="text"
+                                        onChange={(e) => setPwd(e.target.value)}
+                                        className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+                                    />
+                                </div>
 
-                        </canvas> */}
-                    </div>
-
-                    <div className="mt-12 text-center">
-                        <h3 className="text-4xl font-bold text-gray-700">Connect to network</h3>
-
-                        <div className="my-8 flex flex-col">
-                            <label>Wifi name:
-                                <input
-                                    type="text"
-                                    value={ssid}
-                                    onChange={(e) => setSsid(e.target.value)}
-                                />
-                            </label>
-                            <label>Password:
-                                <input
-                                    type="text"
-                                    value={pwd}
-                                    onChange={(e) => setPwd(e.target.value)}
-                                />
-                            </label>
-                            <button onClick={handleSubmit} className="bg-slate-700 rounded-md">submit</button>
+                                <button onClick={handleSubmit} className="mt-3 text-lg font-semibold bg-gray-800 w-full text-white rounded-lg px-6 py-3 block shadow-xl hover:text-white hover:bg-black">
+                                    Connect
+                                </button>
+                            </div>
                         </div>
 
                     </div>
-
-                    {/* <div className="mt-12 text-center">
-                        <h3 className="text-4xl font-bold text-gray-700">Fugt {currentHumidity} c<sup>o</sup></h3>
-                        <div className="my-8">
-                            <h1 className="text-2xl font-bold text-gray-800">Top {maxHumidity} c<sup>o</sup></h1>
-                            <span className="text-gray-500">Højeste fugt i dag</span>
-                        </div>
-                        {/* <canvas>
-
-                        </canvas> 
-                    </div> */}
-
                 </div>
 
             </div>

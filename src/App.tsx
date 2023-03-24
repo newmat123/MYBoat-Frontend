@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+
 function App() {
     const [ssid, setSsid] = useState("");
     const [pwd, setPwd] = useState("");
@@ -14,27 +15,24 @@ function App() {
     const [maxHeat, setMaxHeat] = useState(0);
 
     const makeAPICall = async () => {
-        try {
-            const response = await fetch('http://192.168.69.75/data');
+        axios.get('http://192.168.69.75/data')
+        .then(function (response) {
+            console.log(response);
 
-            const data = await response.json();
-            console.log({ data });
-            // console.log(data[0].value);
-            
-            setTemp(Math.round(data[0].value * 100) / 100);
-            setMaxTemp(Math.round(data[0].value2 * 100) / 100);
+            setTemp(Math.round(response.data[0].value * 100) / 100);
+            setMaxTemp(Math.round(response.data[0].value2 * 100) / 100);
 
-            setHumidity(Math.round(data[1].value * 100) / 100);
-            setMaxHumidity(Math.round(data[1].value2 * 100) / 100);
+            setHumidity(Math.round(response.data[1].value * 100) / 100);
+            setMaxHumidity(Math.round(response.data[1].value2 * 100) / 100);
 
-            setHeat(Math.round(data[2].value * 100) / 100);
-            setMaxHeat(Math.round(data[2].value2 * 100) / 100);
+            setHeat(Math.round(response.data[2].value * 100) / 100);
+            setMaxHeat(Math.round(response.data[2].value2 * 100) / 100);
 
-            setWater(data[3].value);
-        }
-        catch (e) {
-            console.log(e)
-        }
+            setWater(response.data[3].value);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
     useEffect(() => {
         makeAPICall();
@@ -70,7 +68,7 @@ function App() {
                     </div>
                 }
 
-                <div className="w-full  px-4 mx-auto mt-20">
+                <div className="w-full  px-4 mx-auto mt-10">
                     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg bg-slate-50 bg-opacity-80 rounded-md ">
                         <div className="rounded-t mb-0 px-4 py-3 border-0">
                             <div className="flex flex-wrap items-center">
@@ -142,7 +140,7 @@ function App() {
                     </div>
                 </div>
 
-                <div className="relative flex flex-col justify-center bg-slate-50 bg-opacity-80 rounded-md shadow-lg my-14">
+                <div className="relative flex flex-col justify-center bg-slate-50 bg-opacity-80 rounded-md shadow-lg mt-14 mb-auto mx-4">
                     <div className="flex flex-col">
 
                         <div className="mt-5 text-center">

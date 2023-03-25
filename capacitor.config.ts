@@ -1,10 +1,13 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.boatManeger',
+  appId: 'com.example.boatManeger',
   appName: 'BoatManeger',
   webDir: 'build',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
+  server: {
+    cleartext: true
+  }
 };
 
 export default config;

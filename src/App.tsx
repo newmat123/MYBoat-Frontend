@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
 function App() {
     const [ssid, setSsid] = useState("");
     const [pwd, setPwd] = useState("");
@@ -15,31 +14,37 @@ function App() {
     const [maxHeat, setMaxHeat] = useState(0);
 
     const makeAPICall = async () => {
-        axios.get('http://192.168.69.75/data')
-        .then(function (response) {
-            console.log(response);
+        console.log('Get handler was called!');
+        //http://192.168.69.75/data
+        axios.get('http://192.168.1.1/data')
+            .then(function (response) {
+                console.log(response);
+                console.log(response.data);
+                console.log("response");
 
-            setTemp(Math.round(response.data[0].value * 100) / 100);
-            setMaxTemp(Math.round(response.data[0].value2 * 100) / 100);
+                setTemp(Math.round(response.data[0].value * 100) / 100);
+                setMaxTemp(Math.round(response.data[0].value2 * 100) / 100);
 
-            setHumidity(Math.round(response.data[1].value * 100) / 100);
-            setMaxHumidity(Math.round(response.data[1].value2 * 100) / 100);
+                setHumidity(Math.round(response.data[1].value * 100) / 100);
+                setMaxHumidity(Math.round(response.data[1].value2 * 100) / 100);
 
-            setHeat(Math.round(response.data[2].value * 100) / 100);
-            setMaxHeat(Math.round(response.data[2].value2 * 100) / 100);
+                setHeat(Math.round(response.data[2].value * 100) / 100);
+                setMaxHeat(Math.round(response.data[2].value2 * 100) / 100);
 
-            setWater(response.data[3].value);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+                setWater(response.data[3].value);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
     useEffect(() => {
         makeAPICall();
     }, [])
 
     const handleSubmit = async () => {
-        await axios.post('http://192.168.69.75/wifi', {
+        console.log('Post handler was called!');
+        //http://192.168.69.75/wifi
+        await axios.post('http://192.168.1.1/wifi', {
             SSID: ssid,
             PWD: pwd
         }, {

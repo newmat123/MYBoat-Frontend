@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 function App() {
+    const [requestSuccess, setSuccess] = useState(true);
+
     const [ssid, setSsid] = useState("");
     const [pwd, setPwd] = useState("");
+    const [wifiStatus, setWifiStatus] = useState(false);
 
     const [waterInBilge, setWater] = useState(false);
     const [currentTemp, setTemp] = useState(0);
@@ -13,13 +16,13 @@ function App() {
     const [currentHeat, setHeat] = useState(0);
     const [maxHeat, setMaxHeat] = useState(0);
 
-    const makeAPICall = async () => {
-        console.log('Get handler was called!');
+    const getEnvironment = async () => {
+        setSuccess(true);
+        console.log('GetEnvironment handler was called!');
         //http://192.168.69.75/data
         axios.get('http://192.168.1.1/data')
             .then(function (response) {
                 console.log(response);
-                console.log(response.data);
                 console.log("response");
 
                 setTemp(Math.round(response.data[0].value * 100) / 100);
@@ -35,15 +38,90 @@ function App() {
             })
             .catch(function (error) {
                 console.log(error);
+                setSuccess(false);
+                // testing ------------------------------------------------
+                // axios.get('http://192.168.69.75/data')
+                //     .then(function (response) {
+                //         console.log(response);
+                //         console.log("response 2");
+
+                //         setTemp(Math.round(response.data[0].value * 100) / 100);
+                //         setMaxTemp(Math.round(response.data[0].value2 * 100) / 100);
+
+                //         setHumidity(Math.round(response.data[1].value * 100) / 100);
+                //         setMaxHumidity(Math.round(response.data[1].value2 * 100) / 100);
+
+                //         setHeat(Math.round(response.data[2].value * 100) / 100);
+                //         setMaxHeat(Math.round(response.data[2].value2 * 100) / 100);
+
+                //         setWater(response.data[3].value);
+                //     })
+                //     .catch(function (error) {
+                //         console.log(error);
+                //     });
             });
     }
-    useEffect(() => {
-        makeAPICall();
-    }, [])
+
+    const getWifiStatus = async () => {
+        setSuccess(true);
+        console.log('GetWifiStatus handler was called!');
+        //http://192.168.69.75/wifiStatus
+        axios.get('http://192.168.1.1/wifiStatus')
+            .then(function (response) {
+                console.log(response);
+                console.log("response");
+
+                setWifiStatus(response.data.value);
+            })
+            .catch(function (error) {
+                console.log(error);
+                setSuccess(false);
+                // testing ------------------------------------------------
+                // axios.get('http://192.168.69.75/wifiStatus')
+                //     .then(function (response) {
+                //         console.log(response);
+                //         console.log("response 2");
+
+                //         setWifiStatus(response.data.value);
+                //     })
+                //     .catch(function (error) {
+                //         console.log(error);
+                //     });
+            });
+    }
+
+    const resetWarning = async () => {
+        setSuccess(true);
+        console.log('resetWarning handler was called!');
+        //http://192.168.69.75/resetWarning
+        axios.get('http://192.168.1.1/resetWarning')
+            .then(function (response) {
+                console.log(response);
+                console.log("response");
+
+                setWater(response.data.value);
+            })
+            .catch(function (error) {
+                console.log(error);
+                setSuccess(false);
+                // testing ------------------------------------------------
+                // axios.get('http://192.168.69.75/resetWarning')
+                //     .then(function (response) {
+                //         console.log(response);
+                //         console.log("response 2");
+
+                //         setWater(response.data.value);
+                //     })
+                //     .catch(function (error) {
+                //         console.log(error);
+                //     });
+            });
+    }
 
     const handleSubmit = async () => {
+        setSuccess(true);
         console.log('Post handler was called!');
-        //http://192.168.69.75/wifi
+        //http://192.168.69.75/wifi   192.168.1.1
         await axios.post('http://192.168.1.1/wifi', {
             SSID: ssid,
             PWD: pwd
@@ -55,25 +133,69 @@ function App() {
             .then(function (response) {
                 console.log(response);
             })
-            .catch(function (error) {
+            .catch(async function (error) {
                 console.log(error);
+                setSuccess(false);
+                // testing ------------------------------------------------
+                // await axios.post('http://192.168.69.75/wifi', {
+                //     SSID: ssid,
+                //     PWD: pwd
+                // }, {
+                //     headers: {
+                //         'content-type': 'application/json',
+                //     }
+                // })
+                //     .then(function (response) {
+                //         console.log(response);
+                //     })
+                //     .catch(function (error) {
+                //         console.log(error);
+                //     });
             });
     }
+
+    const reloadApp = async () => {
+        await getEnvironment();
+        await getWifiStatus();
+    }
+
+    useEffect(() => {
+        reloadApp();
+    }, [])
 
     return (
         <div className="flex justify-center bg-slate-400 min-h-screen">
 
             <div className="flex flex-col justify-center">
 
+                <div className="absolute w-10 top-1 right-1">
+                    <button onClick={reloadApp}>
+                        <img src="reload.ico" alt="" />
+                    </button>
+
+                </div>
+
                 {
                     waterInBilge &&
 
-                    <div className="mt-12">
+                    <div className="relative mt-12 -mb-12">
                         <div className="font-regular relative block w-full rounded-lg bg-red-500 p-4 text-base leading-5 text-white opacity-100">Der er detekteret vand i kølen.</div>
+                        <button onClick={resetWarning}>
+                            <img src="close.png" alt="" className=" absolute w-7 top-1 right-1" />
+                        </button>
+                    </div>
+                }
+                {
+                    !requestSuccess &&
+                    <div className="relative mt-12 -mb-12">
+                        <div className="font-regular relative block w-full rounded-lg bg-red-500 p-4 text-base leading-5 text-white opacity-100">Noget gik galt. Tjek din forbindelse og prøv igen.</div>
+                        <button onClick={reloadApp}>
+                            <img src="close.png" alt="" className=" absolute w-7 top-1 right-1" />
+                        </button>
                     </div>
                 }
 
-                <div className="w-full  px-4 mx-auto mt-10">
+                <div className="w-full px-4 mx-auto mt-12">
                     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg bg-slate-50 bg-opacity-80 rounded-md ">
                         <div className="rounded-t mb-0 px-4 py-3 border-0">
                             <div className="flex flex-wrap items-center">
@@ -83,7 +205,7 @@ function App() {
                                     </h3>
                                 </div>
                                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                                    <button onClick={makeAPICall} className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
+                                    <button onClick={getEnvironment} className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
                                         update
                                     </button>
                                 </div>
@@ -146,6 +268,14 @@ function App() {
                 </div>
 
                 <div className="relative flex flex-col justify-center bg-slate-50 bg-opacity-80 rounded-md shadow-lg mt-14 mb-auto mx-4">
+
+                    {
+                        wifiStatus ?
+                            <img src="wifi200.png" alt="" className="absolute w-7 top-1 right-1" />
+                            :
+                            <img src="wifi400.png" alt="" className="absolute w-7 top-1 right-1" />
+                    }
+
                     <div className="flex flex-col">
 
                         <div className="mt-5 text-center">

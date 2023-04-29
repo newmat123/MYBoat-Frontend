@@ -1,5 +1,14 @@
+import DataBoxCurrent from './components/dataBoxCurrent';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+
+interface currentData_ {
+    
+}
+
+//192.168.69.75
+//192.168.1.1    soft ap
+const apiUrl = "http://192.168.69.75/";
 
 function App() {
     const [requestSuccess, setSuccess] = useState(true);
@@ -9,30 +18,37 @@ function App() {
     const [wifiStatus, setWifiStatus] = useState(false);
 
     const [waterInBilge, setWater] = useState(false);
-    const [currentTemp, setTemp] = useState(0);
-    const [maxTemp, setMaxTemp] = useState(0);
-    const [currentHumidity, setHumidity] = useState(0);
-    const [maxHumidity, setMaxHumidity] = useState(0);
-    const [currentHeat, setHeat] = useState(0);
-    const [maxHeat, setMaxHeat] = useState(0);
+    // const [currentTemp, setTemp] = useState(0);
+    // const [maxTemp, setMaxTemp] = useState(0);
+    // const [currentHumidity, setHumidity] = useState(0);
+    // const [maxHumidity, setMaxHumidity] = useState(0);
+    // const [currentHeat, setHeat] = useState(0);
+    // const [maxHeat, setMaxHeat] = useState(0);
+
+    const [currentData, setCurrentData] = useState<any>();
 
     const getEnvironment = async () => {
         setSuccess(true);
         console.log('GetEnvironment handler was called!');
         //http://192.168.69.75/data
-        axios.get('http://192.168.1.1/data')
+        axios.get(apiUrl+'data')
             .then(function (response) {
-                console.log(response);
-                console.log("response");
+                // console.log(response);
+                // console.log("response");
 
-                setTemp(Math.round(response.data[0].value * 100) / 100);
-                setMaxTemp(Math.round(response.data[0].value2 * 100) / 100);
+                // setTemp(Math.round(response.data[0].value * 100) / 100);
+                // setMaxTemp(Math.round(response.data[0].value2 * 100) / 100);
 
-                setHumidity(Math.round(response.data[1].value * 100) / 100);
-                setMaxHumidity(Math.round(response.data[1].value2 * 100) / 100);
+                // setHumidity(Math.round(response.data[1].value * 100) / 100);
+                // setMaxHumidity(Math.round(response.data[1].value2 * 100) / 100);
 
-                setHeat(Math.round(response.data[2].value * 100) / 100);
-                setMaxHeat(Math.round(response.data[2].value2 * 100) / 100);
+                // setHeat(Math.round(response.data[2].value * 100) / 100);
+                // setMaxHeat(Math.round(response.data[2].value2 * 100) / 100);
+                setCurrentData(response.data);
+                console.log(currentData);
+                console.log(response.data);
+                console.log("---------");
+                
 
                 setWater(response.data[3].value);
             })
@@ -40,7 +56,7 @@ function App() {
                 console.log(error);
                 setSuccess(false);
                 // testing ------------------------------------------------
-                // axios.get('http://192.168.69.75/data')
+                // axios.get(apiUrl+'data')
                 //     .then(function (response) {
                 //         console.log(response);
                 //         console.log("response 2");
@@ -66,7 +82,7 @@ function App() {
         setSuccess(true);
         console.log('GetWifiStatus handler was called!');
         //http://192.168.69.75/wifiStatus
-        axios.get('http://192.168.1.1/wifiStatus')
+        axios.get(apiUrl+'wifiStatus')
             .then(function (response) {
                 console.log(response);
                 console.log("response");
@@ -77,7 +93,7 @@ function App() {
                 console.log(error);
                 setSuccess(false);
                 // testing ------------------------------------------------
-                // axios.get('http://192.168.69.75/wifiStatus')
+                // axios.get(apiUrl+'wifiStatus')
                 //     .then(function (response) {
                 //         console.log(response);
                 //         console.log("response 2");
@@ -94,7 +110,7 @@ function App() {
         setSuccess(true);
         console.log('resetWarning handler was called!');
         //http://192.168.69.75/resetWarning
-        axios.get('http://192.168.1.1/resetWarning')
+        axios.get(apiUrl+'resetWarning')
             .then(function (response) {
                 console.log(response);
                 console.log("response");
@@ -105,7 +121,7 @@ function App() {
                 console.log(error);
                 setSuccess(false);
                 // testing ------------------------------------------------
-                // axios.get('http://192.168.69.75/resetWarning')
+                // axios.get(apiUrl+'resetWarning')
                 //     .then(function (response) {
                 //         console.log(response);
                 //         console.log("response 2");
@@ -122,7 +138,7 @@ function App() {
         setSuccess(true);
         console.log('Post handler was called!');
         //http://192.168.69.75/wifi   192.168.1.1
-        await axios.post('http://192.168.1.1/wifi', {
+        await axios.post(apiUrl+'wifi', {
             SSID: ssid,
             PWD: pwd
         }, {
@@ -132,12 +148,13 @@ function App() {
         })
             .then(function (response) {
                 console.log(response);
+                setWifiStatus(true);
             })
             .catch(async function (error) {
                 console.log(error);
                 setSuccess(false);
                 // testing ------------------------------------------------
-                // await axios.post('http://192.168.69.75/wifi', {
+                // await axios.post(apiUrl+'wifi', {
                 //     SSID: ssid,
                 //     PWD: pwd
                 // }, {
@@ -172,7 +189,6 @@ function App() {
                     <button onClick={reloadApp}>
                         <img src="reload.ico" alt="" />
                     </button>
-
                 </div>
 
                 {
@@ -194,78 +210,11 @@ function App() {
                         </button>
                     </div>
                 }
-
-                <div className="w-full px-4 mx-auto mt-12">
-                    <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg bg-slate-50 bg-opacity-80 rounded-md ">
-                        <div className="rounded-t mb-0 px-4 py-3 border-0">
-                            <div className="flex flex-wrap items-center">
-                                <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                                    <h3 className="font-semibold text-base text-blueGray-700">
-                                        Boat environment
-                                    </h3>
-                                </div>
-                                <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                                    <button onClick={getEnvironment} className="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
-                                        update
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="block w-full overflow-x-auto">
-                            <table className="items-center w-full border-collapse">
-                                <thead className="">
-                                    <tr>
-                                        <th className="px-6 bg-slate-300 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                            #
-                                        </th>
-                                        <th className="px-6 bg-slate-300 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
-                                            current
-                                        </th>
-                                        <th className="px-6 bg-slate-300 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px">
-                                            Highest
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                            Temperature
-                                        </th>
-                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                                            {currentTemp} c<sup>o</sup>
-                                        </td>
-                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            {maxTemp} c<sup>o</sup>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                            Humidity
-                                        </th>
-                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            {currentHumidity} %
-                                        </td>
-                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            {maxHumidity} %
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                            Heat
-                                        </th>
-                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            {currentHeat} c<sup>o</sup>
-                                        </td>
-                                        <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                            {maxHeat} c<sup>o</sup>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                
+                <DataBoxCurrent 
+                    data = {currentData}
+                    getEnvironment={getEnvironment}
+                />
 
                 <div className="relative flex flex-col justify-center bg-slate-50 bg-opacity-80 rounded-md shadow-lg mt-14 mb-auto mx-4">
 

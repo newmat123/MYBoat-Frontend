@@ -1,16 +1,16 @@
-import { useEffect } from "react";
-
+interface currentData_ {
+    type: string;
+    type2: string;
+    unit: string;
+    unit2: string;
+    value: number|boolean;
+    value2: number;
+}
 
 function DataBoxCurrent(props: {
-    data: any;
-
+    data: currentData_[];
     getEnvironment: () => void;
-  }) {
-
-    useEffect(() => {
-        console.log("data was updated");
-        
-    }, [props.data]);
+}) {
 
     return (
         <div className="w-full px-4 mx-auto mt-12">
@@ -45,42 +45,44 @@ function DataBoxCurrent(props: {
                                 </th>
                             </tr>
                         </thead>
-                        {props.data !== undefined &&
+                        {props.data !== undefined ?
                             <tbody>
-                                <tr>
-                                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                        Temperature
-                                    </th>
-                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                                        {props.data[0]?.value} c<sup>o</sup>
-                                    </td>
-                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                        {props.data[0]?.value2} c<sup>o</sup>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                        Humidity
-                                    </th>
-                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                        {props.data[1]?.value} %
-                                    </td>
-                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                        {props.data[1]?.value2} %
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                        Heat
-                                    </th>
-                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                        {props.data[2].value} c<sup>o</sup>
-                                    </td>
-                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                        {props.data[2]?.value2} c<sup>o</sup>
-                                    </td>
-                                </tr>
+                                {
+                                    props.data.map((data) => (
+                                        // <div key={String(x)}>{x}</div>
+                                        <tr key={data.type}>
+                                            {data.type !== "bilge status" ?
+                                                <>
+                                                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                                                        {data?.type}
+                                                    </th>
+                                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                                                        {data?.value} {data?.unit}
+                                                    </td>
+                                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                                        {data?.value2} {data?.unit}
+                                                    </td>
+                                                </>
+                                                :
+                                                <>
+                                                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                                                        {data?.type}
+                                                    </th>
+                                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                                                        {data?.value === true ?
+                                                            <>Dry</> : <>Wet</>
+                                                        }
+                                                    </td>
+                                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                                    </td>
+                                                </>
+                                            }
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
+                            :
+                            <div>loading...</div>
                         }
                     </table>
                 </div>

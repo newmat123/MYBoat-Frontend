@@ -2,9 +2,6 @@ import DataBoxCurrent from './components/dataBoxCurrent';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-interface currentData_ {
-    
-}
 
 //192.168.69.75
 //192.168.1.1    soft ap
@@ -18,37 +15,18 @@ function App() {
     const [wifiStatus, setWifiStatus] = useState(false);
 
     const [waterInBilge, setWater] = useState(false);
-    // const [currentTemp, setTemp] = useState(0);
-    // const [maxTemp, setMaxTemp] = useState(0);
-    // const [currentHumidity, setHumidity] = useState(0);
-    // const [maxHumidity, setMaxHumidity] = useState(0);
-    // const [currentHeat, setHeat] = useState(0);
-    // const [maxHeat, setMaxHeat] = useState(0);
-
     const [currentData, setCurrentData] = useState<any>();
 
     const getEnvironment = async () => {
         setSuccess(true);
         console.log('GetEnvironment handler was called!');
         //http://192.168.69.75/data
-        axios.get(apiUrl+'data')
+        axios.get(apiUrl + 'data')
             .then(function (response) {
-                // console.log(response);
-                // console.log("response");
-
-                // setTemp(Math.round(response.data[0].value * 100) / 100);
-                // setMaxTemp(Math.round(response.data[0].value2 * 100) / 100);
-
-                // setHumidity(Math.round(response.data[1].value * 100) / 100);
-                // setMaxHumidity(Math.round(response.data[1].value2 * 100) / 100);
-
-                // setHeat(Math.round(response.data[2].value * 100) / 100);
-                // setMaxHeat(Math.round(response.data[2].value2 * 100) / 100);
                 setCurrentData(response.data);
                 console.log(currentData);
                 console.log(response.data);
                 console.log("---------");
-                
 
                 setWater(response.data[3].value);
             })
@@ -82,7 +60,7 @@ function App() {
         setSuccess(true);
         console.log('GetWifiStatus handler was called!');
         //http://192.168.69.75/wifiStatus
-        axios.get(apiUrl+'wifiStatus')
+        axios.get(apiUrl + 'wifiStatus')
             .then(function (response) {
                 console.log(response);
                 console.log("response");
@@ -110,7 +88,7 @@ function App() {
         setSuccess(true);
         console.log('resetWarning handler was called!');
         //http://192.168.69.75/resetWarning
-        axios.get(apiUrl+'resetWarning')
+        axios.get(apiUrl + 'resetWarning')
             .then(function (response) {
                 console.log(response);
                 console.log("response");
@@ -138,7 +116,7 @@ function App() {
         setSuccess(true);
         console.log('Post handler was called!');
         //http://192.168.69.75/wifi   192.168.1.1
-        await axios.post(apiUrl+'wifi', {
+        await axios.post(apiUrl + 'wifi', {
             SSID: ssid,
             PWD: pwd
         }, {
@@ -210,9 +188,9 @@ function App() {
                         </button>
                     </div>
                 }
-                
-                <DataBoxCurrent 
-                    data = {currentData}
+
+                <DataBoxCurrent
+                    data={currentData}
                     getEnvironment={getEnvironment}
                 />
 
@@ -257,12 +235,12 @@ function App() {
                                 </button>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
-            </div>
 
+                
+            </div>
         </div>
     );
 }

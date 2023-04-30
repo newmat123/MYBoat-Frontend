@@ -3,7 +3,7 @@ interface currentData_ {
     type2: string;
     unit: string;
     unit2: string;
-    value: number|boolean;
+    value: number | boolean;
     value2: number;
 }
 
@@ -82,7 +82,7 @@ function DataBoxCurrent(props: {
                                 }
                             </tbody>
                             :
-                            <div>loading...</div>
+                            <div className="text-center">loading...</div>
                         }
                     </table>
                 </div>

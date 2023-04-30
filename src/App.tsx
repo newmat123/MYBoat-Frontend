@@ -1,9 +1,10 @@
 import DataBoxCurrent from './components/dataBoxCurrent';
-import React, { useEffect, useState } from 'react';
+import Warning from './components/warning';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
-//192.168.69.75
+//192.168.69.75  test
 //192.168.1.1    soft ap
 const apiUrl = "http://192.168.69.75/";
 
@@ -20,7 +21,7 @@ function App() {
     const getEnvironment = async () => {
         setSuccess(true);
         console.log('GetEnvironment handler was called!');
-        //http://192.168.69.75/data
+
         axios.get(apiUrl + 'data')
             .then(function (response) {
                 setCurrentData(response.data);
@@ -59,7 +60,7 @@ function App() {
     const getWifiStatus = async () => {
         setSuccess(true);
         console.log('GetWifiStatus handler was called!');
-        //http://192.168.69.75/wifiStatus
+
         axios.get(apiUrl + 'wifiStatus')
             .then(function (response) {
                 console.log(response);
@@ -87,7 +88,7 @@ function App() {
     const resetWarning = async () => {
         setSuccess(true);
         console.log('resetWarning handler was called!');
-        //http://192.168.69.75/resetWarning
+
         axios.get(apiUrl + 'resetWarning')
             .then(function (response) {
                 console.log(response);
@@ -115,7 +116,7 @@ function App() {
     const handleSubmit = async () => {
         setSuccess(true);
         console.log('Post handler was called!');
-        //http://192.168.69.75/wifi   192.168.1.1
+
         await axios.post(apiUrl + 'wifi', {
             SSID: ssid,
             PWD: pwd
@@ -169,30 +170,18 @@ function App() {
                     </button>
                 </div>
 
-                {
-                    waterInBilge &&
-
-                    <div className="relative mt-12 -mb-12">
-                        <div className="font-regular relative block w-full rounded-lg bg-red-500 p-4 text-base leading-5 text-white opacity-100">Der er detekteret vand i kølen.</div>
-                        <button onClick={resetWarning}>
-                            <img src="close.png" alt="" className=" absolute w-7 top-1 right-1" />
-                        </button>
-                    </div>
-                }
-                {
-                    !requestSuccess &&
-                    <div className="relative mt-12 -mb-12">
-                        <div className="font-regular relative block w-full rounded-lg bg-red-500 p-4 text-base leading-5 text-white opacity-100">Noget gik galt. Tjek din forbindelse og prøv igen.</div>
-                        <button onClick={reloadApp}>
-                            <img src="close.png" alt="" className=" absolute w-7 top-1 right-1" />
-                        </button>
-                    </div>
-                }
+                <Warning onClk={resetWarning} show={waterInBilge} >
+                    Der er detekteret vand i kølen.
+                </Warning>
+                <Warning onClk={reloadApp} show={!requestSuccess} >
+                    Noget gik galt. Tjek din forbindelse og prøv igen.
+                </Warning>
 
                 <DataBoxCurrent
                     data={currentData}
                     getEnvironment={getEnvironment}
                 />
+
 
                 <div className="relative flex flex-col justify-center bg-slate-50 bg-opacity-80 rounded-md shadow-lg mt-14 mb-auto mx-4">
 
@@ -239,7 +228,9 @@ function App() {
                 </div>
 
 
-                
+
+
+
             </div>
         </div>
     );

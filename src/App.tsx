@@ -2,10 +2,12 @@ import DataBoxCurrent from './components/dataBoxCurrent';
 import Warning from './components/warning';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import WifiConnect from './components/wifi';
 
 
-//192.168.69.75  test
-//192.168.1.1    soft ap
+//192.168.69.75          test
+//192.168.1.1            soft ap
+//boatmanager.ddns.net   noip dDns
 const apiUrl = "http://192.168.69.75/";
 
 function App() {
@@ -24,7 +26,13 @@ function App() {
 
         axios.get(apiUrl + 'data')
             .then(function (response) {
-                setCurrentData(response.data);
+
+                var temp: any[] = response.data;
+                for (let i = 0; i < response.data.length-1; i++) {
+                    temp[i].value = Math.round(response.data[i].value * 100) / 100;
+                    temp[i].value2 = Math.round(response.data[i].value2 * 100) / 100;
+                }
+                setCurrentData(temp);
                 console.log(currentData);
                 console.log(response.data);
                 console.log("---------");
@@ -70,6 +78,7 @@ function App() {
             })
             .catch(function (error) {
                 console.log(error);
+                setWifiStatus(false);
                 setSuccess(false);
                 // testing ------------------------------------------------
                 // axios.get(apiUrl+'wifiStatus')
@@ -131,6 +140,7 @@ function App() {
             })
             .catch(async function (error) {
                 console.log(error);
+                setWifiStatus(false);
                 setSuccess(false);
                 // testing ------------------------------------------------
                 // await axios.post(apiUrl+'wifi', {
@@ -182,55 +192,15 @@ function App() {
                     getEnvironment={getEnvironment}
                 />
 
-
-                <div className="relative flex flex-col justify-center bg-slate-50 bg-opacity-80 rounded-md shadow-lg mt-14 mb-auto mx-4">
-
-                    {
-                        wifiStatus ?
-                            <img src="wifi200.png" alt="" className="absolute w-7 top-1 right-1" />
-                            :
-                            <img src="wifi400.png" alt="" className="absolute w-7 top-1 right-1" />
-                    }
-
-                    <div className="flex flex-col">
-
-                        <div className="mt-5 text-center">
-                            <h3 className="text-4xl font-bold text-gray-700">Connect to wifi</h3>
-
-                            <div className="my-8 flex flex-col px-5">
-                                <div className="py-1">
-                                    <span className="px-1 text-sm text-gray-600">Wifi name</span>
-                                    <input
-                                        placeholder=""
-                                        value={ssid}
-                                        type="text"
-                                        onChange={(e) => setSsid(e.target.value)}
-                                        className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
-                                    />
-                                </div>
-                                <div className="py-1">
-                                    <span className="px-1 text-sm text-gray-600">Password</span>
-                                    <input
-                                        placeholder=""
-                                        value={pwd}
-                                        type="text"
-                                        onChange={(e) => setPwd(e.target.value)}
-                                        className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
-                                    />
-                                </div>
-
-                                <button onClick={handleSubmit} className="mt-3 text-lg font-semibold bg-gray-800 w-full text-white rounded-lg px-6 py-3 block shadow-xl hover:text-white hover:bg-black">
-                                    Connect
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
+                <WifiConnect 
+                    wifiStatus={wifiStatus}
+                    ssid={ssid}
+                    pwd={pwd}
+                    setSsid={setSsid}
+                    setPwd={setPwd}
+                    onClk={handleSubmit}
+                />
+                
             </div>
         </div>
     );

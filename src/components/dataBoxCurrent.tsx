@@ -45,6 +45,7 @@ function DataBoxCurrent(props: {
                                 </th>
                             </tr>
                         </thead>
+
                         {props.data !== undefined ?
                             <tbody>
                                 {
@@ -69,7 +70,7 @@ function DataBoxCurrent(props: {
                                                         {data?.type}
                                                     </th>
                                                     <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                                                        {data?.value === true ?
+                                                        {data?.value !== true ?
                                                             <>Dry</> : <>Wet</>
                                                         }
                                                     </td>

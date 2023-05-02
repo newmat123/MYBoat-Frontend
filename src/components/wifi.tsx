@@ -12,7 +12,6 @@ function WifiConnect(props: {
 }) {
 
     useEffect(()=>{
-
     },[props.wifiStatus]);
 
     return (

@@ -1,10 +1,9 @@
 import MainPagesController from '../controllers/pages/main.controller';
 
-function Main(props: {}) {
+function Main() {
 
     return (
         <div className="flex justify-center bg-slate-400 min-h-screen">
-
             <div className="flex flex-col justify-center">
 
                 <MainPagesController/>

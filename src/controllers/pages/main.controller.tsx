@@ -1,8 +1,34 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import MainComponent from "../../components/mainComponent";
 
-function MainPagesController(props: {}) {
+interface currentData_ {
+    type: string;
+    type2: string;
+    unit: string;
+    unit2: string;
+    value: number | boolean;
+    value2: number;
+}
+
+interface contextType {
+    reloadApp: () => void;
+    resetWarning: () => void;
+    getEnvironment: () => void;
+    handleSubmit: () => void;
+    setSsid: (ssid: string) => void;
+    setPwd: (pwd: string) => void;
+    waterInBilge: boolean;
+    requestSuccess: boolean;
+    currentData: currentData_[];
+    wifiStatus: boolean;
+    ssid: string;
+    pwd: string;
+}
+
+export const Context = createContext<contextType | null>(null);
+
+function MainPagesController() {
 
     //192.168.69.75          test
     //192.168.1.1            soft ap
@@ -110,21 +136,25 @@ function MainPagesController(props: {}) {
         reloadApp();
     }, [])
 
+    const context = {
+        reloadApp,
+        resetWarning,
+        getEnvironment,
+        handleSubmit,
+        setSsid,
+        setPwd,
+        waterInBilge,
+        requestSuccess,
+        currentData,
+        wifiStatus,
+        ssid,
+        pwd
+    };
+    
     return (
-        <MainComponent
-            reloadApp = {reloadApp}
-            resetWarning = {resetWarning}
-            getEnvironment = {getEnvironment}
-            handleSubmit = {handleSubmit}
-            setSsid = {setSsid}
-            setPwd = {setPwd}
-            waterInBilge = {waterInBilge}
-            requestSuccess = {requestSuccess}
-            currentData = {currentData}
-            wifiStatus = {wifiStatus}
-            ssid = {ssid}
-            pwd = {pwd}
-    />
+        <Context.Provider value={context}>
+            <MainComponent/>
+        </Context.Provider>
     );
 }
 

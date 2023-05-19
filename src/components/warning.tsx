@@ -3,7 +3,6 @@ function Warning(props: {
     show: boolean;
     onClk: () => void;
 }) {
-
     return (
         <>
             {props.show &&

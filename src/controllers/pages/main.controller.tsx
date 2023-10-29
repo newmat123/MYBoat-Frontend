@@ -11,7 +11,7 @@ interface environmentData_ {
     value2: number;
 }
 
-interface data_ {
+export interface data_ {
     requestSuccess: boolean;
     wifiStatus: boolean;
     ssid: string;
@@ -39,7 +39,8 @@ interface contextType {
     resetWarning: () => void;
     getEnvironment: () => void;
     handleSubmit: () => void;
-    setData: (obj: data_) => void;
+    // setData: (obj: data_) => void;
+    handleOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     data: data_;
     environmentData: environmentData_[];
 }
@@ -60,6 +61,8 @@ function MainPagesController() {
         waterInBilge: false
     });
 
+    console.log(data);
+    
     // const [requestSuccess, setSuccess] = useState(true);
     // const [ssid, setSsid] = useState("");
     // const [pwd, setPwd] = useState("");
@@ -70,7 +73,7 @@ function MainPagesController() {
 
     const getEnvironment = async () => {
         // setSuccess(true);
-        setData({
+        !data.requestSuccess && setData({
             ...data,
             requestSuccess: true
         });
@@ -108,7 +111,7 @@ function MainPagesController() {
 
     const getWifiStatus = async () => {
         // setSuccess(true);
-        setData({
+        !data.requestSuccess && setData({
             ...data,
             requestSuccess: true
         });
@@ -140,10 +143,10 @@ function MainPagesController() {
 
     const resetWarning = async () => {
         // setSuccess(true);
-        setData({
+        !data.requestSuccess && setData({
             ...data,
-            requestSuccess: true,
-        })
+            requestSuccess: true
+        });
         console.log('resetWarning handler was called!');
 
         axios.get(apiUrl + 'resetWarning')
@@ -169,8 +172,8 @@ function MainPagesController() {
 
     const handleSubmit = async () => {
         // setSuccess(true);
-        setData({
-            ...data, 
+        !data.requestSuccess && setData({
+            ...data,
             requestSuccess: true
         });
         console.log('Post handler was called!');
@@ -203,6 +206,13 @@ function MainPagesController() {
             });
     }
 
+    const handleOnchange=(e: React.ChangeEvent<HTMLInputElement>)=>{
+        setData((prev)=>({
+            ...prev,
+            [e.target.name]: e.target.value
+        }));
+    }
+
     const reloadApp = async () => {
         await getEnvironment();
         await getWifiStatus();
@@ -232,7 +242,7 @@ function MainPagesController() {
         resetWarning,
         getEnvironment,
         handleSubmit,
-        setData,
+        handleOnchange,
         data,
         environmentData
     };

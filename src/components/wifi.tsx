@@ -26,20 +26,22 @@ function WifiConnect() {
                                 <div className="py-1">
                                     <span className="px-1 text-sm text-gray-600">Wifi name</span>
                                     <input
-                                        placeholder=""
+                                        placeholder="ssid"
                                         value={context.data.ssid}
                                         type="text"
-                                        onChange={(e) => context.setData({...context.data, ssid:e.target.value})}
+                                        name="ssid"
+                                        onChange={context.handleOnchange}
                                         className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
                                     />
                                 </div>
                                 <div className="py-1">
                                     <span className="px-1 text-sm text-gray-600">Password</span>
                                     <input
-                                        placeholder=""
+                                        placeholder="password"
                                         value={context.data.pwd}
                                         type="password"
-                                        onChange={(e) => context.setData({...context.data, pwd:e.target.value})}
+                                        name="pwd"
+                                        onChange={context.handleOnchange}
                                         className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
                                     />
                                 </div>

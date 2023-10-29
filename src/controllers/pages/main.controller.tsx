@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import MainComponent from "../../components/mainComponent";
 
-interface currentData_ {
+interface environmentData_ {
     type: string;
     type2: string;
     unit: string;
@@ -11,19 +11,37 @@ interface currentData_ {
     value2: number;
 }
 
+interface data_ {
+    requestSuccess: boolean;
+    wifiStatus: boolean;
+    ssid: string;
+    pwd: string;
+    waterInBilge: boolean;
+}
+
+// interface contextType {
+//     reloadApp: () => void;
+//     resetWarning: () => void;
+//     getEnvironment: () => void;
+//     handleSubmit: () => void;
+//     setSsid: (ssid: string) => void;
+//     setPwd: (pwd: string) => void;
+//     waterInBilge: boolean;
+//     requestSuccess: boolean;
+//     currentData: currentData_[];
+//     wifiStatus: boolean;
+//     ssid: string;
+//     pwd: string;
+// }
+
 interface contextType {
     reloadApp: () => void;
     resetWarning: () => void;
     getEnvironment: () => void;
     handleSubmit: () => void;
-    setSsid: (ssid: string) => void;
-    setPwd: (pwd: string) => void;
-    waterInBilge: boolean;
-    requestSuccess: boolean;
-    currentData: currentData_[];
-    wifiStatus: boolean;
-    ssid: string;
-    pwd: string;
+    setData: (obj: data_) => void;
+    data: data_;
+    environmentData: environmentData_[];
 }
 
 export const Context = createContext<contextType | null>(null);
@@ -34,18 +52,29 @@ function MainPagesController() {
     //192.168.1.1            soft ap
     //boatmanager.ddns.net   noip dDns
     const apiUrl = "http://192.168.69.75/";
+    const [data, setData] = useState<data_>({
+        requestSuccess: true,
+        wifiStatus: false,
+        ssid: "",
+        pwd: "",
+        waterInBilge: false
+    });
 
-    const [requestSuccess, setSuccess] = useState(true);
+    // const [requestSuccess, setSuccess] = useState(true);
+    // const [ssid, setSsid] = useState("");
+    // const [pwd, setPwd] = useState("");
+    // const [wifiStatus, setWifiStatus] = useState(false);
+    // const [waterInBilge, setWater] = useState(false);
 
-    const [ssid, setSsid] = useState("");
-    const [pwd, setPwd] = useState("");
-    const [wifiStatus, setWifiStatus] = useState(false);
-
-    const [waterInBilge, setWater] = useState(false);
-    const [currentData, setCurrentData] = useState<any>();
+    const [environmentData, setEnvironmentData] = useState<any>();
 
     const getEnvironment = async () => {
-        setSuccess(true);
+        // setSuccess(true);
+        setData({
+            ...data,
+            requestSuccess: true
+        });
+
         console.log('GetEnvironment handler was called!');
 
         axios.get(apiUrl + 'data')
@@ -56,21 +85,33 @@ function MainPagesController() {
                     temp[i].value = Math.round(response.data[i].value * 100) / 100;
                     temp[i].value2 = Math.round(response.data[i].value2 * 100) / 100;
                 }
-                setCurrentData(temp);
-                console.log(currentData);
+                setEnvironmentData(temp);
+                console.log(environmentData);
                 console.log(response.data);
                 console.log("---------");
 
-                setWater(response.data[3].value);
+                // setWater(response.data[3].value);
+                setData({
+                    ...data,
+                    waterInBilge: response.data[3].value
+                });
             })
             .catch(function (error) {
                 console.log(error);
-                setSuccess(false);
+                // setSuccess(false);
+                setData({
+                    ...data,
+                    requestSuccess: false
+                });
             });
     }
 
     const getWifiStatus = async () => {
-        setSuccess(true);
+        // setSuccess(true);
+        setData({
+            ...data,
+            requestSuccess: true
+        });
         console.log('GetWifiStatus handler was called!');
 
         axios.get(apiUrl + 'wifiStatus')
@@ -78,17 +119,31 @@ function MainPagesController() {
                 console.log(response);
                 console.log("response");
 
-                setWifiStatus(response.data.value);
+                // setWifiStatus(response.data.value);
+                setData({
+                    ...data,
+                    wifiStatus: response.data.value
+                });
             })
             .catch(function (error) {
                 console.log(error);
-                setWifiStatus(false);
-                setSuccess(false);
+                // setWifiStatus(false);
+                // setSuccess(false);
+                setData({
+                    ...data,
+                    wifiStatus: false,
+                    requestSuccess: false
+                });
+                
             });
     }
 
     const resetWarning = async () => {
-        setSuccess(true);
+        // setSuccess(true);
+        setData({
+            ...data,
+            requestSuccess: true,
+        })
         console.log('resetWarning handler was called!');
 
         axios.get(apiUrl + 'resetWarning')
@@ -96,21 +151,33 @@ function MainPagesController() {
                 console.log(response);
                 console.log("response");
 
-                setWater(response.data.value);
+                // setWater(response.data.value);
+                setData({
+                    ...data,
+                    waterInBilge: response.data.value,
+                })
             })
             .catch(function (error) {
                 console.log(error);
-                setSuccess(false);
+                // setSuccess(false);
+                setData({
+                    ...data, 
+                    requestSuccess: false
+                });
             });
     }
 
     const handleSubmit = async () => {
-        setSuccess(true);
+        // setSuccess(true);
+        setData({
+            ...data, 
+            requestSuccess: true
+        });
         console.log('Post handler was called!');
 
         await axios.post(apiUrl + 'wifi', {
-            SSID: ssid,
-            PWD: pwd
+            SSID: data.ssid,
+            PWD: data.pwd
         }, {
             headers: {
                 'content-type': 'application/json',
@@ -118,12 +185,21 @@ function MainPagesController() {
         })
             .then(function (response) {
                 console.log(response);
-                setWifiStatus(true);
+                // setWifiStatus(true);
+                setData({
+                    ...data, 
+                    wifiStatus: true
+                });
             })
             .catch(async function (error) {
                 console.log(error);
-                setWifiStatus(false);
-                setSuccess(false);
+                // setWifiStatus(false);
+                // setSuccess(false);
+                setData({
+                    ...data, 
+                    wifiStatus: false,
+                    requestSuccess: false
+                });
             });
     }
 
@@ -136,19 +212,29 @@ function MainPagesController() {
         reloadApp();
     }, [])
 
+    // const context = {
+    //     reloadApp,
+    //     resetWarning,
+    //     getEnvironment,
+    //     handleSubmit,
+    //     setSsid,
+    //     setPwd,
+    //     waterInBilge,
+    //     requestSuccess,
+    //     currentData,
+    //     wifiStatus,
+    //     ssid,
+    //     pwd
+    // };
+
     const context = {
         reloadApp,
         resetWarning,
         getEnvironment,
         handleSubmit,
-        setSsid,
-        setPwd,
-        waterInBilge,
-        requestSuccess,
-        currentData,
-        wifiStatus,
-        ssid,
-        pwd
+        setData,
+        data,
+        environmentData
     };
     
     return (

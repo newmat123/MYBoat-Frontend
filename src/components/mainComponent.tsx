@@ -17,10 +17,10 @@ function MainComponent() {
                         </button>
                     </div>
 
-                    <Warning onClk={context.resetWarning} show={context.waterInBilge} >
+                    <Warning onClk={context.resetWarning} show={context.data.waterInBilge} >
                         Der er detekteret vand i kølen.
                     </Warning>
-                    <Warning onClk={context.reloadApp} show={!context.requestSuccess} >
+                    <Warning onClk={context.reloadApp} show={!context.data.requestSuccess} >
                         Noget gik galt. Tjek din forbindelse og prøv igen.
                     </Warning>
 

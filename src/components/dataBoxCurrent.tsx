@@ -40,10 +40,10 @@ function DataBoxCurrent() {
                                     </tr>
                                 </thead>
 
-                                {context.currentData !== undefined ?
+                                {context.environmentData !== undefined ?
                                     <tbody>
                                         {
-                                            context.currentData.map((data) => (
+                                            context.environmentData.map((data) => (
                                                 <tr key={data.type}>
                                                     {data.type !== "bilge status" ?
                                                         <>

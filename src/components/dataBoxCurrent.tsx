@@ -7,9 +7,9 @@ function DataBoxCurrent() {
     return (
         <>
             { context !== null &&
-                <div className="w-full px-4 mx-auto mt-12">
-                    <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg bg-slate-50 bg-opacity-80 rounded-md ">
-                        <div className="rounded-t mb-0 px-4 py-3 border-0">
+                <div className="w-full px-4 mx-auto">
+                    <div className="relative flex flex-col min-w-0 break-words w-full mb-6 ">
+                        {/* <div className="rounded-t mb-0 px-4 py-3 border-0">
                             <div className="flex flex-wrap items-center">
                                 <div className="relative w-full px-4 max-w-full flex-grow flex-1">
                                     <h3 className="font-semibold text-base text-blueGray-700">
@@ -22,19 +22,19 @@ function DataBoxCurrent() {
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className="block w-full overflow-x-auto">
                             <table className="items-center w-full border-collapse">
-                                <thead className="">
+                                <thead>
                                     <tr>
-                                        <th className="px-6 bg-slate-300 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                        <th className="px-6 align-middle border-b border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                                             #
                                         </th>
-                                        <th className="px-6 bg-slate-300 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                        <th className="px-6 align-middle border-b border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                                             current
                                         </th>
-                                        <th className="px-6 bg-slate-300 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px">
+                                        <th className="px-6 align-middle border-b border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px">
                                             Highest
                                         </th>
                                     </tr>

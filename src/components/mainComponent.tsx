@@ -6,79 +6,78 @@ import { Context } from "../controllers/pages/main.controller";
 import ControlBox from "./controlBox";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGamepad, faTemperatureHigh, faTowerCell, faFire, faUmbrella } from "@fortawesome/free-solid-svg-icons"; // import the icons you need
+import DataContainer from "./dataContainer";
 
 function MainComponent() {
     const context = useContext(Context);
 
     return (
-        context !== null ?
-            <>
-                {/* <div className="absolute w-10 top-1 right-1">
-                    <button onClick={context.reloadApp}>
-                        <img src="reload.ico" alt="" />
-                    </button>
-                </div>
+        <>
+            {/* <div className="absolute w-10 top-1 right-1">
+                <button onClick={context.reloadApp}>
+                    <img src="reload.ico" alt="" />
+                </button>
+            </div>
 
-                <Warning onClk={context.resetWarning} show={context.data.waterInBilge} >
-                    Der er detekteret vand i kølen.
-                </Warning>
-                <Warning onClk={context.reloadApp} show={!context.data.requestSuccess} >
-                    Noget gik galt. Tjek din forbindelse og prøv igen.
-                </Warning> */}
+            <Warning onClk={context.resetWarning} show={context.data.waterInBilge} >
+                Der er detekteret vand i kølen.
+            </Warning>
+            <Warning onClk={context.reloadApp} show={!context.data.requestSuccess} >
+                Noget gik galt. Tjek din forbindelse og prøv igen.
+            </Warning> */}
 
-                <div className="flex space-x-2 m-3">
 
-                    <ControlBox onClk={() => { context.selectedControl === "wifi" ? context.setSelectedControl(undefined) : context.setSelectedControl("wifi") }} selected={context.selectedControl === "wifi"}>
-                        <FontAwesomeIcon className="text-5xl" icon={faTowerCell} />
-                        <h1>Connection</h1>
-                    </ControlBox>
+            <div className="flex space-x-2 m-3">
 
-                    <ControlBox>
-                        <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
-                        <h1>Controlpannel</h1>
-                    </ControlBox>
+                <ControlBox onClk={() => { context?.selectedControl === "wifi" ? context.setSelectedControl(undefined) : context?.setSelectedControl("wifi") }} selected={context?.selectedControl === "wifi"}>
+                    <FontAwesomeIcon className="text-5xl" icon={faTowerCell} />
+                    <h1>Connection</h1>
+                </ControlBox>
 
-                    <ControlBox>
-                        <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
-                        <h1>Køl</h1>
-                    </ControlBox>
+                <ControlBox onClk={() => { context?.selectedControl === "control" ? context.setSelectedControl(undefined) : context?.setSelectedControl("control") }} selected={context?.selectedControl === "control"}>
+                    <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
+                    <h1>Controlpannel</h1>
+                </ControlBox>
 
-                </div>
+                <ControlBox onClk={() => { context?.selectedControl === "keel" ? context.setSelectedControl(undefined) : context?.setSelectedControl("keel") }} selected={context?.selectedControl === "keel"}>
+                    <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
+                    <h1>Køl</h1>
+                </ControlBox>
 
-                <div className="w-full bg-[#212121]">
-                    {context.selectedControl === "wifi" &&
-                        <WifiConnect />
-                    }
-                </div>
+            </div>
 
-                <div className="flex space-x-2 m-3">
+            <DataContainer showDropDown={context?.selectedControl === "wifi" || context?.selectedControl === "control" || context?.selectedControl === "keel"}>
+                {context?.selectedControl === "wifi" &&
+                    <WifiConnect />
+                }
+            </DataContainer>
 
-                    <ControlBox onClk={() => { context.selectedControl === "temp" ? context.setSelectedControl(undefined) : context.setSelectedControl("temp") }} selected={context.selectedControl === "temp"}>
-                        <FontAwesomeIcon className="text-5xl" icon={faTemperatureHigh} />
-                        <h1>Temp</h1>
-                    </ControlBox>
+            <div className="flex space-x-2 m-3">
 
-                    <ControlBox>
-                        <FontAwesomeIcon className="text-5xl" icon={faFire} />
-                        <h1>Heat</h1>
-                    </ControlBox>
+                <ControlBox onClk={() => { context?.selectedControl === "temp" ? context.setSelectedControl(undefined) : context?.setSelectedControl("temp") }} selected={context?.selectedControl === "temp"}>
+                    <FontAwesomeIcon className="text-5xl" icon={faTemperatureHigh} />
+                    <h1>Temp</h1>
+                </ControlBox>
 
-                    <ControlBox>
-                        <FontAwesomeIcon className="text-5xl" icon={faUmbrella} />
-                        <h1>Humidity</h1>
-                    </ControlBox>
+                <ControlBox onClk={() => { context?.selectedControl === "heat" ? context.setSelectedControl(undefined) : context?.setSelectedControl("heat") }} selected={context?.selectedControl === "heat"}>
+                    <FontAwesomeIcon className="text-5xl" icon={faFire} />
+                    <h1>Heat</h1>
+                </ControlBox>
 
-                </div>
+                <ControlBox onClk={() => { context?.selectedControl === "hum" ? context.setSelectedControl(undefined) : context?.setSelectedControl("hum") }} selected={context?.selectedControl === "hum"}>
+                    <FontAwesomeIcon className="text-5xl" icon={faUmbrella} />
+                    <h1>Humidity</h1>
+                </ControlBox>
 
-                <div className=" w-full bg-[#212121]">
-                    {context.selectedControl === "temp" &&
-                        <DataBoxCurrent />
-                    }
-                </div>
+            </div>
 
-            </>
-            :
-            <h2>loading...</h2>
+            <DataContainer showDropDown={context?.selectedControl === "temp" || context?.selectedControl === "heat" || context?.selectedControl === "hum"}>
+                {context?.selectedControl === "temp" &&
+                    <DataBoxCurrent />
+                }
+            </DataContainer>
+
+        </>
     );
 }
 

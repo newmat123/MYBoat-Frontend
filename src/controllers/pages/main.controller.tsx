@@ -3,7 +3,7 @@ import axios from "axios";
 import MainComponent from "../../components/mainComponent";
 import DataBoxCurrent from "../../components/dataBoxCurrent";
 
-type controls = "wifi" | "control" | "temp" | "hum" | "heat" | undefined;
+type controls = "wifi" | "control" | "temp" | "hum" | "heat" | "keel" | undefined;
 
 type environmentData_ = {
     type: string;

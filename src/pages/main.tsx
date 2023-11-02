@@ -6,8 +6,8 @@ function Main() {
         <div className="flex justify-center bg-black min-h-screen text-white">
             <div className="flex flex-col justify-center">
 
-                <MainPagesController/>
-                
+                <MainPagesController />
+
             </div>
         </div>
     );

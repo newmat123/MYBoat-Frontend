@@ -6,7 +6,7 @@ function DataBoxCurrent() {
 
     return (
         <>
-            { context !== null &&
+            {context !== null &&
                 <div className="w-full px-4 mx-auto">
                     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 ">
                         {/* <div className="rounded-t mb-0 px-4 py-3 border-0">

@@ -1,49 +1,38 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import MainComponent from "../../components/mainComponent";
+import DataBoxCurrent from "../../components/dataBoxCurrent";
 
-interface environmentData_ {
+type controls = "wifi" | "control" | "temp" | "hum" | "heat" | undefined;
+
+type environmentData_ = {
     type: string;
     type2: string;
     unit: string;
     unit2: string;
     value: number | boolean;
     value2: number;
-}
+};
 
-export interface data_ {
+export type data_ = {
     requestSuccess: boolean;
     wifiStatus: boolean;
     ssid: string;
     pwd: string;
     waterInBilge: boolean;
-}
+};
 
-// interface contextType {
-//     reloadApp: () => void;
-//     resetWarning: () => void;
-//     getEnvironment: () => void;
-//     handleSubmit: () => void;
-//     setSsid: (ssid: string) => void;
-//     setPwd: (pwd: string) => void;
-//     waterInBilge: boolean;
-//     requestSuccess: boolean;
-//     currentData: currentData_[];
-//     wifiStatus: boolean;
-//     ssid: string;
-//     pwd: string;
-// }
-
-interface contextType {
+type contextType = {
     reloadApp: () => void;
     resetWarning: () => void;
     getEnvironment: () => void;
     handleSubmit: () => void;
-    // setData: (obj: data_) => void;
     handleOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    setSelectedControl: (con: controls) => void;
     data: data_;
     environmentData: environmentData_[];
-}
+    selectedControl: controls;
+};
 
 export const Context = createContext<contextType | null>(null);
 
@@ -52,7 +41,7 @@ function MainPagesController() {
     //192.168.69.75          test
     //192.168.1.1            soft ap
     //boatmanager.ddns.net   noip dDns
-    const apiUrl = "http://192.168.69.75/";
+    const apiUrl = "http://192.168.1.1/";
     const [data, setData] = useState<data_>({
         requestSuccess: true,
         wifiStatus: false,
@@ -62,17 +51,12 @@ function MainPagesController() {
     });
 
     console.log(data);
-    
-    // const [requestSuccess, setSuccess] = useState(true);
-    // const [ssid, setSsid] = useState("");
-    // const [pwd, setPwd] = useState("");
-    // const [wifiStatus, setWifiStatus] = useState(false);
-    // const [waterInBilge, setWater] = useState(false);
 
-    const [environmentData, setEnvironmentData] = useState<any>();
+    const [environmentData, setEnvironmentData] = useState<any | undefined>();
+
+    const [selectedControl, setSelectedControl] = useState<controls>();
 
     const getEnvironment = async () => {
-        // setSuccess(true);
         !data.requestSuccess && setData({
             ...data,
             requestSuccess: true
@@ -93,7 +77,6 @@ function MainPagesController() {
                 console.log(response.data);
                 console.log("---------");
 
-                // setWater(response.data[3].value);
                 setData({
                     ...data,
                     waterInBilge: response.data[3].value
@@ -101,7 +84,6 @@ function MainPagesController() {
             })
             .catch(function (error) {
                 console.log(error);
-                // setSuccess(false);
                 setData({
                     ...data,
                     requestSuccess: false
@@ -110,7 +92,6 @@ function MainPagesController() {
     }
 
     const getWifiStatus = async () => {
-        // setSuccess(true);
         !data.requestSuccess && setData({
             ...data,
             requestSuccess: true
@@ -122,7 +103,6 @@ function MainPagesController() {
                 console.log(response);
                 console.log("response");
 
-                // setWifiStatus(response.data.value);
                 setData({
                     ...data,
                     wifiStatus: response.data.value
@@ -130,19 +110,16 @@ function MainPagesController() {
             })
             .catch(function (error) {
                 console.log(error);
-                // setWifiStatus(false);
-                // setSuccess(false);
                 setData({
                     ...data,
                     wifiStatus: false,
                     requestSuccess: false
                 });
-                
+
             });
     }
 
     const resetWarning = async () => {
-        // setSuccess(true);
         !data.requestSuccess && setData({
             ...data,
             requestSuccess: true
@@ -154,7 +131,6 @@ function MainPagesController() {
                 console.log(response);
                 console.log("response");
 
-                // setWater(response.data.value);
                 setData({
                     ...data,
                     waterInBilge: response.data.value,
@@ -162,16 +138,14 @@ function MainPagesController() {
             })
             .catch(function (error) {
                 console.log(error);
-                // setSuccess(false);
                 setData({
-                    ...data, 
+                    ...data,
                     requestSuccess: false
                 });
             });
     }
 
     const handleSubmit = async () => {
-        // setSuccess(true);
         !data.requestSuccess && setData({
             ...data,
             requestSuccess: true
@@ -188,26 +162,23 @@ function MainPagesController() {
         })
             .then(function (response) {
                 console.log(response);
-                // setWifiStatus(true);
                 setData({
-                    ...data, 
+                    ...data,
                     wifiStatus: true
                 });
             })
             .catch(async function (error) {
                 console.log(error);
-                // setWifiStatus(false);
-                // setSuccess(false);
                 setData({
-                    ...data, 
+                    ...data,
                     wifiStatus: false,
                     requestSuccess: false
                 });
             });
     }
 
-    const handleOnchange=(e: React.ChangeEvent<HTMLInputElement>)=>{
-        setData((prev)=>({
+    const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value
         }));
@@ -222,34 +193,21 @@ function MainPagesController() {
         reloadApp();
     }, [])
 
-    // const context = {
-    //     reloadApp,
-    //     resetWarning,
-    //     getEnvironment,
-    //     handleSubmit,
-    //     setSsid,
-    //     setPwd,
-    //     waterInBilge,
-    //     requestSuccess,
-    //     currentData,
-    //     wifiStatus,
-    //     ssid,
-    //     pwd
-    // };
-
     const context = {
         reloadApp,
         resetWarning,
         getEnvironment,
         handleSubmit,
         handleOnchange,
+        setSelectedControl,
         data,
-        environmentData
+        environmentData,
+        selectedControl,
     };
-    
+
     return (
         <Context.Provider value={context}>
-            <MainComponent/>
+            <MainComponent />
         </Context.Provider>
     );
 }

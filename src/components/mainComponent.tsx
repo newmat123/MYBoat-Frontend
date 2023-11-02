@@ -5,7 +5,7 @@ import WifiConnect from "./wifi";
 import { Context } from "../controllers/pages/main.controller";
 import ControlBox from "./controlBox";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGamepad, faTemperatureHigh, faTowerCell } from "@fortawesome/free-solid-svg-icons"; // import the icons you need
+import { faGamepad, faTemperatureHigh, faTowerCell, faFire, faUmbrella } from "@fortawesome/free-solid-svg-icons"; // import the icons you need
 
 function MainComponent() {
     const context = useContext(Context);
@@ -28,49 +28,54 @@ function MainComponent() {
 
                 <div className="flex space-x-2 m-3">
 
-                    <ControlBox selected={true}>
-                        <FontAwesomeIcon className="text-5xl" icon={faTemperatureHigh} />
-                        <h1>Envioment</h1>
-                    </ControlBox>
-
-                    <ControlBox>
-                        <FontAwesomeIcon className="text-5xl" icon={faTowerCell} />
-                        <h1>Connection</h1>
-                    </ControlBox>
-                    
-                    <ControlBox>
-                        <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
-                        <h1>Envioment</h1>
-                    </ControlBox>
-
-                </div>
-
-                <div className=" w-full bg-[#212121]">
-                    <DataBoxCurrent/>
-                </div>
-
-                <div className="flex space-x-2 m-3">
-
-                    <ControlBox>
-                        <FontAwesomeIcon className="text-5xl" icon={faTemperatureHigh} />
-                        <h1>Envioment</h1>
-                    </ControlBox>
-
-                    <ControlBox>
+                    <ControlBox onClk={() => { context.selectedControl === "wifi" ? context.setSelectedControl(undefined) : context.setSelectedControl("wifi") }} selected={context.selectedControl === "wifi"}>
                         <FontAwesomeIcon className="text-5xl" icon={faTowerCell} />
                         <h1>Connection</h1>
                     </ControlBox>
 
                     <ControlBox>
                         <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
-                        <h1>Envioment</h1>
+                        <h1>Controlpannel</h1>
+                    </ControlBox>
+
+                    <ControlBox>
+                        <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
+                        <h1>Køl</h1>
                     </ControlBox>
 
                 </div>
 
                 <div className="w-full bg-[#212121]">
-                    <WifiConnect/>
+                    {context.selectedControl === "wifi" &&
+                        <WifiConnect />
+                    }
                 </div>
+
+                <div className="flex space-x-2 m-3">
+
+                    <ControlBox onClk={() => { context.selectedControl === "temp" ? context.setSelectedControl(undefined) : context.setSelectedControl("temp") }} selected={context.selectedControl === "temp"}>
+                        <FontAwesomeIcon className="text-5xl" icon={faTemperatureHigh} />
+                        <h1>Temp</h1>
+                    </ControlBox>
+
+                    <ControlBox>
+                        <FontAwesomeIcon className="text-5xl" icon={faFire} />
+                        <h1>Heat</h1>
+                    </ControlBox>
+
+                    <ControlBox>
+                        <FontAwesomeIcon className="text-5xl" icon={faUmbrella} />
+                        <h1>Humidity</h1>
+                    </ControlBox>
+
+                </div>
+
+                <div className=" w-full bg-[#212121]">
+                    {context.selectedControl === "temp" &&
+                        <DataBoxCurrent />
+                    }
+                </div>
+
             </>
             :
             <h2>loading...</h2>

@@ -5,7 +5,7 @@ config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatic
 
 function App() {
     return (
-        <Main/>
+        <Main />
     );
 }
 

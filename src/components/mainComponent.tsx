@@ -54,7 +54,7 @@ function MainComponent() {
 
             <div className="flex space-x-2 m-3">
 
-                <ControlBox onClk={() => { context?.selectedControl === "temp" ? context.setSelectedControl(undefined) : context?.setSelectedControl("temp") }} selected={context?.selectedControl === "temp"}>
+                <ControlBox onClk={() => { context?.selectedControl === "temperature" ? context.setSelectedControl(undefined) : context?.setSelectedControl("temperature") }} selected={context?.selectedControl === "temperature"}>
                     <FontAwesomeIcon className="text-5xl" icon={faTemperatureHigh} />
                     <h1>Temp</h1>
                 </ControlBox>
@@ -64,15 +64,15 @@ function MainComponent() {
                     <h1>Heat</h1>
                 </ControlBox>
 
-                <ControlBox onClk={() => { context?.selectedControl === "hum" ? context.setSelectedControl(undefined) : context?.setSelectedControl("hum") }} selected={context?.selectedControl === "hum"}>
+                <ControlBox onClk={() => { context?.selectedControl === "humidity" ? context.setSelectedControl(undefined) : context?.setSelectedControl("humidity") }} selected={context?.selectedControl === "humidity"}>
                     <FontAwesomeIcon className="text-5xl" icon={faUmbrella} />
                     <h1>Humidity</h1>
                 </ControlBox>
 
             </div>
 
-            <DataContainer showDropDown={context?.selectedControl === "temp" || context?.selectedControl === "heat" || context?.selectedControl === "hum"}>
-                {context?.selectedControl === "temp" &&
+            <DataContainer showDropDown={context?.selectedControl === "temperature" || context?.selectedControl === "heat" || context?.selectedControl === "humidity"}>
+                {context?.selectedControl === "temperature" &&
                     <DataBoxCurrent />
                 }
             </DataContainer>

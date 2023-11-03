@@ -38,41 +38,46 @@ function DataBoxCurrent() {
                             </tr>
                         </thead>
 
-                        {context?.environmentData !== undefined ?
-                            <tbody>
-                                {
-                                    context.environmentData.map((data) => (
-                                        <tr key={data.type}>
-                                            {data.type !== "bilge status" ?
-                                                <>
-                                                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                                        {data?.type}
-                                                    </th>
-                                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                                                        {data?.value} {data?.unit}
-                                                    </td>
-                                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                        {data?.value2} {data?.unit}
-                                                    </td>
-                                                </>
-                                                :
-                                                <>
-                                                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                                                        {data?.type}
-                                                    </th>
-                                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
-                                                        {data?.value !== true ?
-                                                            <>Dry</> : <>Wet</>
-                                                        }
-                                                    </td>
-                                                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                                    </td>
-                                                </>
-                                            }
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
+                        {context?.data.envData !== undefined ?
+                            <div>
+                                <h1>{context.data.envData.type} - {context.data.envData.value} {context.data.envData.unit}</h1>
+                                <h2>{context.data.envData.type2} - {context.data.envData.value2} {context.data.envData.unit2}</h2>
+                            </div>
+
+                            // <tbody>
+                            //     {
+                            //         context.data.envData.map((data) => (
+                            //             <tr key={data.type}>
+                            //                 {data.type !== "bilge status" ?
+                            //                     <>
+                            //                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                            //                             {data?.type}
+                            //                         </th>
+                            //                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                            //                             {data?.value} {data?.unit}
+                            //                         </td>
+                            //                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                            //                             {data?.value2} {data?.unit}
+                            //                         </td>
+                            //                     </>
+                            //                     :
+                            //                     <>
+                            //                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                            //                             {data?.type}
+                            //                         </th>
+                            //                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ">
+                            //                             {data?.value !== true ?
+                            //                                 <>Dry</> : <>Wet</>
+                            //                             }
+                            //                         </td>
+                            //                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                            //                         </td>
+                            //                     </>
+                            //                 }
+                            //             </tr>
+                            //         ))
+                            //     }
+                            // </tbody>
                             :
                             <div className="text-center">loading...</div>
                         }

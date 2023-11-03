@@ -1,18 +1,19 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import MainComponent from "../../components/mainComponent";
-import DataBoxCurrent from "../../components/dataBoxCurrent";
 
-type controls = "wifi" | "control" | "temp" | "hum" | "heat" | "keel" | undefined;
+type controls = "wifi" | "control" | "temperature" | "humidity" | "heat" | "keel" | undefined;
 
-type environmentData_ = {
-    type: string;
-    type2: string;
-    unit: string;
-    unit2: string;
-    value: number | boolean;
-    value2: number;
-};
+type GetEndpoints = "data" | "resetWarning" | "bilgeStatus" | "heat" | "humidity" | "temperature" | "wifiStatus"
+
+// type environmentData_ = {
+//     type: string;
+//     type2: string;
+//     unit: string;
+//     unit2: string;
+//     value: number | boolean;
+//     value2: number;
+// };
 
 export type data_ = {
     requestSuccess: boolean;
@@ -20,17 +21,25 @@ export type data_ = {
     ssid: string;
     pwd: string;
     waterInBilge: boolean;
+    envData: {
+        type?: string;
+        type2?: string;
+        unit?: string;
+        unit2?: string;
+        value?: number | boolean;
+        value2?: number;
+    } | undefined
 };
 
 type contextType = {
     reloadApp: () => void;
     resetWarning: () => void;
-    getEnvironment: () => void;
+    getEnvironment: (endpoint: GetEndpoints) => void;
     handleSubmit: () => void;
     handleOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     setSelectedControl: (con: controls) => void;
     data: data_;
-    environmentData: environmentData_[];
+    // environmentData: environmentData_[];
     selectedControl: controls;
 };
 
@@ -47,16 +56,19 @@ function MainPagesController() {
         wifiStatus: false,
         ssid: "",
         pwd: "",
-        waterInBilge: false
+        waterInBilge: false,
+        envData: undefined
     });
 
     console.log(data);
 
-    const [environmentData, setEnvironmentData] = useState<any | undefined>();
+    //const [environmentData, setEnvironmentData] = useState<any | undefined>();
 
     const [selectedControl, setSelectedControl] = useState<controls>();
 
-    const getEnvironment = async () => {
+
+
+    const getEnvironment = async (endpoint: GetEndpoints) => {
         !data.requestSuccess && setData({
             ...data,
             requestSuccess: true
@@ -64,22 +76,27 @@ function MainPagesController() {
 
         console.log('GetEnvironment handler was called!');
 
-        axios.get(apiUrl + 'data')
+        axios.get(apiUrl + endpoint)
             .then(function (response) {
 
-                var temp: any[] = response.data;
-                for (let i = 0; i < response.data.length - 1; i++) {
-                    temp[i].value = Math.round(response.data[i].value * 100) / 100;
-                    temp[i].value2 = Math.round(response.data[i].value2 * 100) / 100;
-                }
-                setEnvironmentData(temp);
-                console.log(environmentData);
-                console.log(response.data);
-                console.log("---------");
+                // var temp: any[] = response.data;
+                // for (let i = 0; i < response.data.length - 1; i++) {
+                //     temp[i].value = Math.round(response.data[i].value * 100) / 100;
+                //     temp[i].value2 = Math.round(response.data[i].value2 * 100) / 100;
+                // }
+                
+                // setEnvironmentData(temp);
+                // console.log(environmentData);
+                // console.log(response.data);
+                // console.log("---------");
 
                 setData({
                     ...data,
-                    waterInBilge: response.data[3].value
+                    envData:{
+                        value: Math.round(response.data.value * 100) / 100,
+                        value2: Math.round(response.data.value2 * 100) / 100
+                    }
+                    // waterInBilge: response.data[3].value
                 });
             })
             .catch(function (error) {
@@ -90,6 +107,9 @@ function MainPagesController() {
                 });
             });
     }
+
+
+
 
     const getWifiStatus = async () => {
         !data.requestSuccess && setData({
@@ -185,13 +205,19 @@ function MainPagesController() {
     }
 
     const reloadApp = async () => {
-        await getEnvironment();
+        await getEnvironment("data");
         await getWifiStatus();
     }
 
     useEffect(() => {
         reloadApp();
     }, [])
+
+    useEffect(() => {
+        if(typeof selectedControl !== undefined){
+            getEnvironment(selectedControl as GetEndpoints);
+        }
+    }, [selectedControl])
 
     const context = {
         reloadApp,
@@ -201,7 +227,6 @@ function MainPagesController() {
         handleOnchange,
         setSelectedControl,
         data,
-        environmentData,
         selectedControl,
     };
 

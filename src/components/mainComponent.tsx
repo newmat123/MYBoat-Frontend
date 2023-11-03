@@ -72,9 +72,9 @@ function MainComponent() {
             </div>
 
             <DataContainer showDropDown={context?.selectedControl === "temperature" || context?.selectedControl === "heat" || context?.selectedControl === "humidity"}>
-                {context?.selectedControl === "temperature" &&
+                {/* {context?.selectedControl === "temperature" && */}
                     <DataBoxCurrent />
-                }
+                {/* // } */}
             </DataContainer>
 
         </>

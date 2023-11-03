@@ -93,6 +93,10 @@ function MainPagesController() {
                 setData({
                     ...data,
                     envData:{
+                        type: response.data.type,
+                        type2: response.data.type2,
+                        unit: response.data.unit,
+                        unit2: response.data.unit2,
                         value: Math.round(response.data.value * 100) / 100,
                         value2: Math.round(response.data.value2 * 100) / 100
                     }

@@ -1,19 +1,20 @@
 import { createContext, useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import MainComponent from "../../components/mainComponent";
+import { ClientApi } from "../../apis/clientAPI";
 
 type controls = "wifi" | "control" | "temperature" | "humidity" | "heat" | "keel" | undefined;
 
-type GetEndpoints = "data" | "resetWarning" | "bilgeStatus" | "heat" | "humidity" | "temperature" | "wifiStatus"
+// type GetEndpoints = "data" | "resetWarning" | "bilgeStatus" | "heat" | "humidity" | "temperature" | "wifiStatus"
 
-// type environmentData_ = {
-//     type: string;
-//     type2: string;
-//     unit: string;
-//     unit2: string;
-//     value: number | boolean;
-//     value2: number;
-// };
+type environment_ = {
+    type?: string;
+    type2?: string;
+    unit?: string;
+    unit2?: string;
+    value?: number | boolean;
+    value2?: number;
+} | undefined
 
 export type data_ = {
     requestSuccess: boolean;
@@ -21,25 +22,17 @@ export type data_ = {
     ssid: string;
     pwd: string;
     waterInBilge: boolean;
-    envData: {
-        type?: string;
-        type2?: string;
-        unit?: string;
-        unit2?: string;
-        value?: number | boolean;
-        value2?: number;
-    } | undefined
+    envData: environment_;
 };
 
 type contextType = {
-    reloadApp: () => void;
     resetWarning: () => void;
-    getEnvironment: (endpoint: GetEndpoints) => void;
+    // ClientApi: () => void
+    // getEnvironment: (endpoint: GetEndpoints) => void;
     handleSubmit: () => void;
     handleOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     setSelectedControl: (con: controls) => void;
     data: data_;
-    // environmentData: environmentData_[];
     selectedControl: controls;
 };
 
@@ -47,158 +40,156 @@ export const Context = createContext<contextType | null>(null);
 
 function MainPagesController() {
 
-    //192.168.69.75          test
-    //192.168.1.1            soft ap
-    //boatmanager.ddns.net   noip dDns
-    const apiUrl = "http://192.168.1.1/";
     const [data, setData] = useState<data_>({
         requestSuccess: true,
         wifiStatus: false,
         ssid: "",
         pwd: "",
         waterInBilge: false,
-        envData: undefined
+        envData: undefined,
     });
-
-    console.log(data);
-
-    //const [environmentData, setEnvironmentData] = useState<any | undefined>();
 
     const [selectedControl, setSelectedControl] = useState<controls>();
 
+    const [temp, setTemp] = useState<environment_>(undefined);
+    const [humidity, setHumidity] = useState<environment_>(undefined);
+    const [heat, setHeat] = useState<environment_>(undefined);
 
-
-    const getEnvironment = async (endpoint: GetEndpoints) => {
+    const onFetchEvent = () => {
         !data.requestSuccess && setData({
             ...data,
             requestSuccess: true
         });
-
-        console.log('GetEnvironment handler was called!');
-
-        axios.get(apiUrl + endpoint)
-            .then(function (response) {
-
-                // var temp: any[] = response.data;
-                // for (let i = 0; i < response.data.length - 1; i++) {
-                //     temp[i].value = Math.round(response.data[i].value * 100) / 100;
-                //     temp[i].value2 = Math.round(response.data[i].value2 * 100) / 100;
-                // }
-                
-                // setEnvironmentData(temp);
-                // console.log(environmentData);
-                // console.log(response.data);
-                // console.log("---------");
-
-                setData({
-                    ...data,
-                    envData:{
-                        type: response.data.type,
-                        type2: response.data.type2,
-                        unit: response.data.unit,
-                        unit2: response.data.unit2,
-                        value: Math.round(response.data.value * 100) / 100,
-                        value2: Math.round(response.data.value2 * 100) / 100
-                    }
-                    // waterInBilge: response.data[3].value
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-                setData({
-                    ...data,
-                    requestSuccess: false
-                });
-            });
     }
 
+    // https://semaphoreci.com/blog/api-layer-react
+    //add api layer
 
+    // const getEnvironment = async (endpoint: GetEndpoints) => {
+    //     onFetchEvent();
+    //     console.log('GetEnvironment handler was called!');
 
+    //     axios.get(apiUrl + endpoint)
+    //         .then((response) => {
+    //             setData({
+    //                 ...data,
+    //                 envData: {
+    //                     type: response.data.type,
+    //                     type2: response.data.type2,
+    //                     unit: response.data.unit,
+    //                     unit2: response.data.unit2,
+    //                     value: Math.round(response.data.value * 100) / 100,
+    //                     value2: Math.round(response.data.value2 * 100) / 100
+    //                 }
+    //             });
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //             setData({
+    //                 ...data,
+    //                 requestSuccess: false
+    //             });
+    //         });
+    // }
 
-    const getWifiStatus = async () => {
-        !data.requestSuccess && setData({
-            ...data,
-            requestSuccess: true
-        });
-        console.log('GetWifiStatus handler was called!');
+    // const getWifiStatus = async () => {
+    //     onFetchEvent();
 
-        axios.get(apiUrl + 'wifiStatus')
-            .then(function (response) {
-                console.log(response);
-                console.log("response");
+    //     console.log('GetWifiStatus handler was called!');
 
-                setData({
-                    ...data,
-                    wifiStatus: response.data.value
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-                setData({
-                    ...data,
-                    wifiStatus: false,
-                    requestSuccess: false
-                });
+    //     axios.get(apiUrl + 'wifiStatus')
+    //         .then((response) => {
+    //             console.log(response);
+    //             console.log("response");
 
-            });
-    }
+    //             setData({
+    //                 ...data,
+    //                 wifiStatus: response.data.value
+    //             });
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //             setData({
+    //                 ...data,
+    //                 wifiStatus: false,
+    //                 requestSuccess: false
+    //             });
+
+    //         });
+    // }
 
     const resetWarning = async () => {
-        !data.requestSuccess && setData({
-            ...data,
-            requestSuccess: true
-        });
+        onFetchEvent();
         console.log('resetWarning handler was called!');
 
-        axios.get(apiUrl + 'resetWarning')
-            .then(function (response) {
-                console.log(response);
-                console.log("response");
+        setData({
+            ...data,
+            waterInBilge: await ClientApi.getBilgeStatus(),
+        })
 
-                setData({
-                    ...data,
-                    waterInBilge: response.data.value,
-                })
-            })
-            .catch(function (error) {
-                console.log(error);
-                setData({
-                    ...data,
-                    requestSuccess: false
-                });
-            });
+        // const res = await ClientApi.getBilgeStatus();
+        // if (res === true){
+        //     setData({
+        //         ...data,
+        //         waterInBilge: res,
+        //     })
+        // }else{
+        //     setData({
+        //         ...data,
+        //         requestSuccess: false,
+        //     })
+        // }
+
+
+
+        // axios.get(apiUrl + 'resetWarning')
+        //     .then((response) => {
+        //         console.log(response);
+        //         console.log("response");
+
+        //         setData({
+        //             ...data,
+        //             waterInBilge: response.data.value,
+        //         })
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //         setData({
+        //             ...data,
+        //             requestSuccess: false
+        //         });
+        //     });
     }
 
     const handleSubmit = async () => {
-        !data.requestSuccess && setData({
-            ...data,
-            requestSuccess: true
-        });
+        onFetchEvent();
         console.log('Post handler was called!');
 
-        await axios.post(apiUrl + 'wifi', {
-            SSID: data.ssid,
-            PWD: data.pwd
-        }, {
-            headers: {
-                'content-type': 'application/json',
-            }
-        })
-            .then(function (response) {
-                console.log(response);
-                setData({
-                    ...data,
-                    wifiStatus: true
-                });
-            })
-            .catch(async function (error) {
-                console.log(error);
-                setData({
-                    ...data,
-                    wifiStatus: false,
-                    requestSuccess: false
-                });
-            });
+        ClientApi.postWifiCredentials(data.ssid, data.pwd);
+
+        // await axios.post(apiUrl + 'wifi', {
+        //     SSID: data.ssid,
+        //     PWD: data.pwd
+        // }, {
+        //     headers: {
+        //         'content-type': 'application/json',
+        //     }
+        // })
+        //     .then((response) => {
+        //         console.log(response);
+        //         setData({
+        //             ...data,
+        //             wifiStatus: true
+        //         });
+        //     })
+        //     .catch(async (error) => {
+        //         console.log(error);
+        //         setData({
+        //             ...data,
+        //             wifiStatus: false,
+        //             requestSuccess: false
+        //         });
+        //     });
     }
 
     const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,25 +199,54 @@ function MainPagesController() {
         }));
     }
 
-    const reloadApp = async () => {
-        await getEnvironment("data");
-        await getWifiStatus();
+    // const reloadApp = async () => {
+    // await getEnvironment("data");
+    // await getWifiStatus();
+    // }
+
+    // useEffect(() => {
+    // reloadApp();
+    // }, [])
+
+    const handleClkEvent = async () => {
+        switch (selectedControl) {
+            case "temperature":
+                setTemp(await ClientApi.getTemperature());
+                setData((prev) => ({
+                    ...prev,
+                    envData: temp,
+                }));
+                break;
+            case "heat":
+                setHeat(await ClientApi.getHeat());
+                setData((prev) => ({
+                    ...prev,
+                    envData: heat,
+                }));
+                break;
+            case "humidity":
+                setHumidity(await ClientApi.getHumidity());
+                setData((prev) => ({
+                    ...prev,
+                    envData: humidity,
+                }));
+                break;
+
+            default:
+                break;
+        }
     }
 
     useEffect(() => {
-        reloadApp();
-    }, [])
-
-    useEffect(() => {
-        if(typeof selectedControl !== undefined){
-            getEnvironment(selectedControl as GetEndpoints);
+        if (typeof selectedControl !== undefined) {
+            handleClkEvent();
         }
     }, [selectedControl])
 
     const context = {
-        reloadApp,
+        // reloadApp,
         resetWarning,
-        getEnvironment,
+        // getEnvironment,
         handleSubmit,
         handleOnchange,
         setSelectedControl,

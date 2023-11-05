@@ -1,0 +1,29 @@
+import axios from "axios"
+
+//192.168.69.75          test
+//192.168.1.1            soft ap
+//boatmanager.ddns.net   noip dDns
+// const apiUrl = "http://192.168.1.1/";
+
+export const api = axios.create({
+    withCredentials: true,
+    baseURL: "http://192.168.1.1",
+})
+
+// defining a custom error handler for all APIs
+const errorHandler = (error: any) => {
+    const statusCode = error.response?.status
+
+    // logging only errors that are not 401
+    if (statusCode && statusCode !== 401) {
+        console.error(error)
+    }
+
+    return Promise.reject(error)
+}
+
+// registering the custom error handler to the
+// "api" axios instance
+api.interceptors.response.use(undefined, (error) => {
+    return errorHandler(error)
+})

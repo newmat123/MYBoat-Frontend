@@ -209,8 +209,15 @@ function MainPagesController() {
     // }, [])
 
     const handleClkEvent = async () => {
+        // console.log("----------------");
+        // console.log(await ClientApi.getTemperature());
+        
         switch (selectedControl) {
             case "temperature":
+                setData((prev) => ({
+                    ...prev,
+                    envData: temp,
+                }));
                 setTemp(await ClientApi.getTemperature());
                 setData((prev) => ({
                     ...prev,
@@ -218,6 +225,10 @@ function MainPagesController() {
                 }));
                 break;
             case "heat":
+                setData((prev) => ({
+                    ...prev,
+                    envData: heat,
+                }));
                 setHeat(await ClientApi.getHeat());
                 setData((prev) => ({
                     ...prev,
@@ -225,6 +236,10 @@ function MainPagesController() {
                 }));
                 break;
             case "humidity":
+                setData((prev) => ({
+                    ...prev,
+                    envData: humidity,
+                }));
                 setHumidity(await ClientApi.getHumidity());
                 setData((prev) => ({
                     ...prev,

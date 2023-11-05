@@ -2,9 +2,6 @@ import axios from "axios"
 
 //192.168.69.75          test
 //192.168.1.1            soft ap
-//boatmanager.ddns.net   noip dDns
-// const apiUrl = "http://192.168.1.1/";
-
 export const api = axios.create({
     baseURL: "http://192.168.1.1",
 })

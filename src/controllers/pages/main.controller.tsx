@@ -7,7 +7,7 @@ type controls = "wifi" | "control" | "temperature" | "humidity" | "heat" | "keel
 
 // type GetEndpoints = "data" | "resetWarning" | "bilgeStatus" | "heat" | "humidity" | "temperature" | "wifiStatus"
 
-type environment_ = {
+export type environment_ = {
     type?: string;
     type2?: string;
     unit?: string;
@@ -22,7 +22,9 @@ export type data_ = {
     ssid: string;
     pwd: string;
     waterInBilge: boolean;
-    envData: environment_;
+    temp: environment_;
+    humidity: environment_;
+    heat: environment_;
 };
 
 type contextType = {
@@ -46,14 +48,16 @@ function MainPagesController() {
         ssid: "",
         pwd: "",
         waterInBilge: false,
-        envData: undefined,
+        temp: undefined,
+        humidity: undefined,
+        heat: undefined
     });
 
     const [selectedControl, setSelectedControl] = useState<controls>();
 
-    const [temp, setTemp] = useState<environment_>(undefined);
-    const [humidity, setHumidity] = useState<environment_>(undefined);
-    const [heat, setHeat] = useState<environment_>(undefined);
+    // const [temp, setTemp] = useState<environment_>(undefined);
+    // const [humidity, setHumidity] = useState<environment_>(undefined);
+    // const [heat, setHeat] = useState<environment_>(undefined);
 
     const onFetchEvent = () => {
         !data.requestSuccess && setData({
@@ -214,37 +218,49 @@ function MainPagesController() {
         
         switch (selectedControl) {
             case "temperature":
+                const temp = await ClientApi.getTemperature();
                 setData((prev) => ({
                     ...prev,
-                    envData: temp,
+                    temp: temp,
                 }));
-                setTemp(await ClientApi.getTemperature());
-                setData((prev) => ({
-                    ...prev,
-                    envData: temp,
-                }));
+
+                // setTemp(await ClientApi.getTemperature());
+                // setData((prev) => ({
+                //     ...prev,
+                //     envData: temp,
+                // }));
                 break;
             case "heat":
+                const heat = await ClientApi.getHeat();
                 setData((prev) => ({
                     ...prev,
-                    envData: heat,
+                    heat: heat,
                 }));
-                setHeat(await ClientApi.getHeat());
-                setData((prev) => ({
-                    ...prev,
-                    envData: heat,
-                }));
+                // setData((prev) => ({
+                //     ...prev,
+                //     envData: heat,
+                // }));
+                // setHeat(await ClientApi.getHeat());
+                // setData((prev) => ({
+                //     ...prev,
+                //     envData: heat,
+                // }));
                 break;
             case "humidity":
+                const humidity = await ClientApi.getHumidity();
                 setData((prev) => ({
                     ...prev,
-                    envData: humidity,
+                    humidity: humidity,
                 }));
-                setHumidity(await ClientApi.getHumidity());
-                setData((prev) => ({
-                    ...prev,
-                    envData: humidity,
-                }));
+                // setData((prev) => ({
+                //     ...prev,
+                //     envData: humidity,
+                // }));
+                // setHumidity(await ClientApi.getHumidity());
+                // setData((prev) => ({
+                //     ...prev,
+                //     envData: humidity,
+                // }));
                 break;
 
             default:

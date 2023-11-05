@@ -1,36 +1,35 @@
 import { createContext, useEffect, useState } from "react";
-import axios from "axios";
 import MainComponent from "../../components/mainComponent";
-import DataBoxCurrent from "../../components/dataBoxCurrent";
+import { ClientApi } from "../../apis/clientAPI";
 
-type controls = "wifi" | "control" | "temp" | "hum" | "heat" | "keel" | undefined;
+type controls = "wifi" | "control" | "temperature" | "humidity" | "heat" | "keel" | undefined;
 
-type environmentData_ = {
-    type: string;
-    type2: string;
-    unit: string;
-    unit2: string;
-    value: number | boolean;
-    value2: number;
-};
+export type environment_ = {
+    type?: string;
+    type2?: string;
+    unit?: string;
+    unit2?: string;
+    value?: number | boolean;
+    value2?: number;
+} | undefined
 
 export type data_ = {
-    requestSuccess: boolean;
+    // requestSuccess: boolean;
     wifiStatus: boolean;
     ssid: string;
     pwd: string;
     waterInBilge: boolean;
+    temp: environment_;
+    humidity: environment_;
+    heat: environment_;
 };
 
 type contextType = {
-    reloadApp: () => void;
-    resetWarning: () => void;
-    getEnvironment: () => void;
+    resetBilgeStatus: () => void;
     handleSubmit: () => void;
     handleOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     setSelectedControl: (con: controls) => void;
     data: data_;
-    environmentData: environmentData_[];
     selectedControl: controls;
 };
 
@@ -38,143 +37,39 @@ export const Context = createContext<contextType | null>(null);
 
 function MainPagesController() {
 
-    //192.168.69.75          test
-    //192.168.1.1            soft ap
-    //boatmanager.ddns.net   noip dDns
-    const apiUrl = "http://192.168.1.1/";
     const [data, setData] = useState<data_>({
-        requestSuccess: true,
+        // requestSuccess: true,
         wifiStatus: false,
         ssid: "",
         pwd: "",
-        waterInBilge: false
+        waterInBilge: false,
+        temp: undefined,
+        humidity: undefined,
+        heat: undefined
     });
-
-    console.log(data);
-
-    const [environmentData, setEnvironmentData] = useState<any | undefined>();
 
     const [selectedControl, setSelectedControl] = useState<controls>();
 
-    const getEnvironment = async () => {
-        !data.requestSuccess && setData({
-            ...data,
-            requestSuccess: true
-        });
+    // const onFetchEvent = () => {
+    //     !data.requestSuccess && setData({
+    //         ...data,
+    //         requestSuccess: true
+    //     });
+    // }
 
-        console.log('GetEnvironment handler was called!');
-
-        axios.get(apiUrl + 'data')
-            .then(function (response) {
-
-                var temp: any[] = response.data;
-                for (let i = 0; i < response.data.length - 1; i++) {
-                    temp[i].value = Math.round(response.data[i].value * 100) / 100;
-                    temp[i].value2 = Math.round(response.data[i].value2 * 100) / 100;
-                }
-                setEnvironmentData(temp);
-                console.log(environmentData);
-                console.log(response.data);
-                console.log("---------");
-
-                setData({
-                    ...data,
-                    waterInBilge: response.data[3].value
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-                setData({
-                    ...data,
-                    requestSuccess: false
-                });
-            });
-    }
-
-    const getWifiStatus = async () => {
-        !data.requestSuccess && setData({
-            ...data,
-            requestSuccess: true
-        });
-        console.log('GetWifiStatus handler was called!');
-
-        axios.get(apiUrl + 'wifiStatus')
-            .then(function (response) {
-                console.log(response);
-                console.log("response");
-
-                setData({
-                    ...data,
-                    wifiStatus: response.data.value
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-                setData({
-                    ...data,
-                    wifiStatus: false,
-                    requestSuccess: false
-                });
-
-            });
-    }
-
-    const resetWarning = async () => {
-        !data.requestSuccess && setData({
-            ...data,
-            requestSuccess: true
-        });
+    const resetBilgeStatus = async () => {
+        // onFetchEvent();
         console.log('resetWarning handler was called!');
-
-        axios.get(apiUrl + 'resetWarning')
-            .then(function (response) {
-                console.log(response);
-                console.log("response");
-
-                setData({
-                    ...data,
-                    waterInBilge: response.data.value,
-                })
-            })
-            .catch(function (error) {
-                console.log(error);
-                setData({
-                    ...data,
-                    requestSuccess: false
-                });
-            });
+        setData({
+            ...data,
+            waterInBilge: await ClientApi.resetBilgeStatus(),
+        })
     }
 
     const handleSubmit = async () => {
-        !data.requestSuccess && setData({
-            ...data,
-            requestSuccess: true
-        });
+        // onFetchEvent();
         console.log('Post handler was called!');
-
-        await axios.post(apiUrl + 'wifi', {
-            SSID: data.ssid,
-            PWD: data.pwd
-        }, {
-            headers: {
-                'content-type': 'application/json',
-            }
-        })
-            .then(function (response) {
-                console.log(response);
-                setData({
-                    ...data,
-                    wifiStatus: true
-                });
-            })
-            .catch(async function (error) {
-                console.log(error);
-                setData({
-                    ...data,
-                    wifiStatus: false,
-                    requestSuccess: false
-                });
-            });
+        ClientApi.postWifiCredentials(data.ssid, data.pwd);
     }
 
     const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,24 +79,47 @@ function MainPagesController() {
         }));
     }
 
-    const reloadApp = async () => {
-        await getEnvironment();
-        await getWifiStatus();
+    const handleClkEvent = async () => {
+        switch (selectedControl) {
+            case "temperature":
+                const temp = await ClientApi.getTemperature();
+                setData((prev) => ({
+                    ...prev,
+                    temp: temp,
+                }));
+                break;
+            case "heat":
+                const heat = await ClientApi.getHeat();
+                setData((prev) => ({
+                    ...prev,
+                    heat: heat,
+                }));
+                break;
+            case "humidity":
+                const humidity = await ClientApi.getHumidity();
+                setData((prev) => ({
+                    ...prev,
+                    humidity: humidity,
+                }));
+                break;
+
+            default:
+                break;
+        }
     }
 
     useEffect(() => {
-        reloadApp();
-    }, [])
+        if (typeof selectedControl !== undefined) {
+            handleClkEvent();
+        }
+    }, [selectedControl])
 
     const context = {
-        reloadApp,
-        resetWarning,
-        getEnvironment,
+        resetBilgeStatus,
         handleSubmit,
         handleOnchange,
         setSelectedControl,
         data,
-        environmentData,
         selectedControl,
     };
 

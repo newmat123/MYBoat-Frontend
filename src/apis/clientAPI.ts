@@ -57,7 +57,15 @@ export const ClientApi = {
     },
     getBilgeStatus: async function (cancel = false) {
         const response = await api.request({
-            url: "/resetWarning", // change name
+            url: "/bilgeStatus",
+            method: "GET",
+            signal: cancel ? cancelApiObject[this.getBilgeStatus.name].handleRequestCancellation().signal : undefined,
+        })
+        return response.data.value
+    },
+    resetBilgeStatus: async function (cancel = false) {
+        const response = await api.request({
+            url: "/resetBilgeStatus",
             method: "GET",
             signal: cancel ? cancelApiObject[this.getBilgeStatus.name].handleRequestCancellation().signal : undefined,
         })

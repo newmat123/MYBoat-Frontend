@@ -1,16 +1,13 @@
-import MainPagesController from '../controllers/pages/main.controller';
+import MainPagesController from "../controllers/pages/main.controller";
 
 function Main() {
-
-    return (
-        <div className="flex justify-center bg-black min-h-screen text-white">
-            <div className="flex flex-col justify-center">
-
-                <MainPagesController />
-
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex justify-center bg-black min-h-screen text-white">
+      <div className="flex flex-col justify-center">
+        <MainPagesController />
+      </div>
+    </div>
+  );
 }
 
 export default Main;

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { ReactNode, useContext } from "react";
 import EnvironmentDataBox from "./environmentDataBox";
 import Warning from "./warning";
 import WifiConnect from "./wifi";
@@ -32,45 +32,7 @@ function MainComponent() {
                 Noget gik galt. Tjek din forbindelse og prøv igen.
             </Warning> */}
 
-      <div className="flex space-x-2 m-3">
-        <ControlBox
-          onClk={() => {
-            context?.selectedControl === "wifi"
-              ? context.setSelectedControl(undefined)
-              : context?.setSelectedControl("wifi");
-          }}
-          selected={context?.selectedControl === "wifi"}
-        >
-          <FontAwesomeIcon className="text-5xl" icon={faTowerCell} />
-          <h1>Connection</h1>
-        </ControlBox>
-
-        <ControlBox
-          onClk={() => {
-            context?.selectedControl === "control"
-              ? context.setSelectedControl(undefined)
-              : context?.setSelectedControl("control");
-          }}
-          selected={context?.selectedControl === "control"}
-        >
-          <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
-          <h1>Controlpannel</h1>
-        </ControlBox>
-
-        <ControlBox
-          onClk={() => {
-            context?.selectedControl === "keel"
-              ? context.setSelectedControl(undefined)
-              : context?.setSelectedControl("keel");
-          }}
-          selected={context?.selectedControl === "keel"}
-        >
-          <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
-          <h1>Køl</h1>
-        </ControlBox>
-      </div>
-
-      <DataContainer
+      {/* <DataContainer
         showDropDown={
           context?.selectedControl === "wifi" ||
           context?.selectedControl === "control" ||
@@ -78,9 +40,35 @@ function MainComponent() {
         }
       >
         {context?.selectedControl === "wifi" && <WifiConnect />}
+      </DataContainer> */}
+
+      <header>
+        <h1 className="m-5 text-3xl font-extrabold">MYBoat</h1>
+      </header>
+
+      <DataContainer showDropDown={context?.selectedControl !== undefined}>
+        {context?.selectedControl === "wifi" && <WifiConnect />}
+        {context?.selectedControl === "temperature" && (
+          <>
+            <h1>Temperature</h1>
+            <EnvironmentDataBox data={context?.data.temperature} />
+          </>
+        )}
+        {context?.selectedControl === "heat" && (
+          <>
+            <h1>heat</h1>
+            <EnvironmentDataBox data={context?.data.heat} />
+          </>
+        )}
+        {context?.selectedControl === "humidity" && (
+          <>
+            <h1>humidity</h1>
+            <EnvironmentDataBox data={context?.data.humidity} />
+          </>
+        )}
       </DataContainer>
 
-      <div className="flex space-x-2 m-3">
+      <YScrollContainer>
         <ControlBox
           onClk={() => {
             context?.selectedControl === "temperature"
@@ -116,36 +104,55 @@ function MainComponent() {
           <FontAwesomeIcon className="text-5xl" icon={faUmbrella} />
           <h1>Humidity</h1>
         </ControlBox>
-      </div>
 
-      <DataContainer
-        showDropDown={
-          context?.selectedControl === "temperature" ||
-          context?.selectedControl === "heat" ||
-          context?.selectedControl === "humidity"
-        }
-      >
-        {context?.selectedControl === "temperature" && (
-          <>
-            <h1>Temperature</h1>
-            <EnvironmentDataBox data={context?.data.temperature} />
-          </>
-        )}
-        {context?.selectedControl === "heat" && (
-          <>
-            <h1>heat</h1>
-            <EnvironmentDataBox data={context?.data.heat} />
-          </>
-        )}
-        {context?.selectedControl === "humidity" && (
-          <>
-            <h1>humidity</h1>
-            <EnvironmentDataBox data={context?.data.humidity} />
-          </>
-        )}
-      </DataContainer>
+        <ControlBox
+          onClk={() => {
+            context?.selectedControl === "wifi"
+              ? context.setSelectedControl(undefined)
+              : context?.setSelectedControl("wifi");
+          }}
+          selected={context?.selectedControl === "wifi"}
+        >
+          <FontAwesomeIcon className="text-5xl" icon={faTowerCell} />
+          <h1>Connection</h1>
+        </ControlBox>
+
+        <ControlBox
+          onClk={() => {
+            context?.selectedControl === "control"
+              ? context.setSelectedControl(undefined)
+              : context?.setSelectedControl("control");
+          }}
+          selected={context?.selectedControl === "control"}
+        >
+          <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
+          <h1>Controlpannel</h1>
+        </ControlBox>
+
+        <ControlBox
+          onClk={() => {
+            context?.selectedControl === "keel"
+              ? context.setSelectedControl(undefined)
+              : context?.setSelectedControl("keel");
+          }}
+          selected={context?.selectedControl === "keel"}
+        >
+          <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
+          <h1>Køl</h1>
+        </ControlBox>
+      </YScrollContainer>
     </>
   );
 }
+
+const YScrollContainer = (Props: { children: ReactNode }) => {
+  return (
+    <div className=" mb-10 flex justify-center w-screen ">
+      <div className=" overflow-x-auto ">
+        <div className="flex space-x-2 px-2">{Props.children}</div>
+      </div>
+    </div>
+  );
+};
 
 export default MainComponent;

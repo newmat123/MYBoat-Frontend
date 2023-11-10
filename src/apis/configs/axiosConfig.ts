@@ -1,9 +1,7 @@
 import axios from "axios";
 
-//192.168.69.75          test
-//192.168.1.1            soft ap
 export const api = axios.create({
-  baseURL: "http://192.168.1.1",
+  baseURL: process.env.REACT_APP_EXSPRESS_BACKEND,
 });
 
 // defining a custom error handler for all APIs

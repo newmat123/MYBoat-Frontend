@@ -13,14 +13,19 @@ type controls =
 
 export type environment_ =
   | {
-      type?: string;
-      type2?: string;
-      unit?: string;
-      unit2?: string;
-      value?: number | boolean;
-      value2?: number;
-    }
+      temperature?: number;
+      heat?: number;
+      humidity?: number;
+      bilgeStatus?: boolean;
+      timestamp?: string;
+    }[]
   | undefined;
+
+// export type temperature_ =
+//   | { temperature?: number; timestamp?: string }[]
+//   | undefined;
+// export type heat_ = { heat?: number; timestamp?: string }[] | undefined;
+// export type humidity_ = { humidity?: number; timestamp?: string }[] | undefined;
 
 export type data_ = {
   // requestSuccess: boolean;
@@ -28,12 +33,12 @@ export type data_ = {
   ssid: string;
   pwd: string;
   waterInBilge: boolean;
-  temp: environment_;
-  humidity: environment_;
+  temperature: environment_;
   heat: environment_;
+  humidity: environment_;
 };
 
-type contextType = {
+type contextType_ = {
   resetBilgeStatus: () => void;
   handleSubmit: () => void;
   handleOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -42,7 +47,7 @@ type contextType = {
   selectedControl: controls;
 };
 
-export const Context = createContext<contextType | null>(null);
+export const Context = createContext<contextType_ | null>(null);
 
 function MainPagesController() {
   const [data, setData] = useState<data_>({
@@ -51,7 +56,7 @@ function MainPagesController() {
     ssid: "",
     pwd: "",
     waterInBilge: false,
-    temp: undefined,
+    temperature: undefined,
     humidity: undefined,
     heat: undefined,
   });
@@ -67,17 +72,17 @@ function MainPagesController() {
 
   const resetBilgeStatus = async () => {
     // onFetchEvent();
-    console.log("resetWarning handler was called!");
-    setData({
-      ...data,
-      waterInBilge: await ClientApi.resetBilgeStatus(),
-    });
+    // console.log("resetWarning handler was called!");
+    // setData({
+    //   ...data,
+    //   waterInBilge: await ClientApi.resetBilgeStatus(),
+    // });
   };
 
   const handleSubmit = async () => {
     // onFetchEvent();
     console.log("Post handler was called!");
-    ClientApi.postWifiCredentials(data.ssid, data.pwd);
+    // ClientApi.postWifiCredentials(data.ssid, data.pwd);
   };
 
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,10 +95,10 @@ function MainPagesController() {
   const handleClkEvent = async () => {
     switch (selectedControl) {
       case "temperature":
-        const temp = await ClientApi.getTemperature();
+        const temperature = await ClientApi.getTemperature();
         setData((prev) => ({
           ...prev,
-          temp: temp,
+          temperature: temperature,
         }));
         break;
       case "heat":

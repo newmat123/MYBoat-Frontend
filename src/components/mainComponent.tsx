@@ -128,7 +128,7 @@ function MainComponent() {
         {context?.selectedControl === "temperature" && (
           <>
             <h1>Temperature</h1>
-            <EnvironmentDataBox data={context?.data.temp} />
+            <EnvironmentDataBox data={context?.data.temperature} />
           </>
         )}
         {context?.selectedControl === "heat" && (

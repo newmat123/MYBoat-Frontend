@@ -1,8 +1,9 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_EXSPRESS_BACKEND,
+  baseURL: process.env.REACT_APP_SOFT_AP,
 });
+// REACT_APP_EXSPRESS_BACKEND
 
 // defining a custom error handler for all APIs
 const errorHandler = (error: any) => {

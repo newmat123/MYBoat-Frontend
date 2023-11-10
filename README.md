@@ -44,3 +44,8 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 REACT_APP_EXSPRESS_BACKEND="http://.."
 REACT_APP_SOFT_AP="http://.."
 REACT_APP_TEST_URL="http://.."
+
+### `capacitorjs workflow`
+
+yarn cap sync
+yarn cap open android // or ios

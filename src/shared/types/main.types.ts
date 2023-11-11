@@ -1,14 +1,5 @@
 import { environment_ } from "./shared.types";
 
-//might use portal instead
-export type controls =
-  | "control"
-  | "temperature"
-  | "humidity"
-  | "heat"
-  | "keel"
-  | undefined;
-
 export type data_ = {
   // requestSuccess: boolean;
   waterInBilge: boolean;
@@ -18,8 +9,12 @@ export type data_ = {
 };
 
 export type contextType_ = {
+  getTemperature: () => void;
+  getHeat: () => void;
+  getHumidity: () => void;
+  changeSelected: (selected: boolean, str: string) => void;
   resetBilgeStatus: () => void;
-  setSelectedControl: (con: controls) => void;
+  setSelectedControl: (str: string | undefined) => void;
   data: data_;
-  selectedControl: controls;
+  selectedControl: string | undefined;
 };

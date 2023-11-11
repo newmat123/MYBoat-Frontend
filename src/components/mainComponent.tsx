@@ -51,87 +51,35 @@ function MainComponent() {
         </Link>
       </header>
 
-      <DataContainer showDropDown={context?.selectedControl !== undefined}>
-        {context?.selectedControl === "temperature" && (
-          <>
-            <h1>Temperature</h1>
-            <EnvironmentDataBox data={context?.data.temperature} />
-          </>
-        )}
-        {context?.selectedControl === "heat" && (
-          <>
-            <h1>heat</h1>
-            <EnvironmentDataBox data={context?.data.heat} />
-          </>
-        )}
-        {context?.selectedControl === "humidity" && (
-          <>
-            <h1>humidity</h1>
-            <EnvironmentDataBox data={context?.data.humidity} />
-          </>
-        )}
-      </DataContainer>
+      <section id="displayDataPortal"></section>
 
       <YScrollContainer>
-        <ControlBox
-          onClk={() => {
-            context?.selectedControl === "temperature"
-              ? context.setSelectedControl(undefined)
-              : context?.setSelectedControl("temperature");
-          }}
-          selected={context?.selectedControl === "temperature"}
-        >
-          <FontAwesomeIcon className="text-5xl" icon={faTemperatureHigh} />
-          <h1>Temp</h1>
-        </ControlBox>
-
-        <ControlBox
-          onClk={() => {
-            context?.selectedControl === "heat"
-              ? context.setSelectedControl(undefined)
-              : context?.setSelectedControl("heat");
-          }}
-          selected={context?.selectedControl === "heat"}
-        >
-          <FontAwesomeIcon className="text-5xl" icon={faFire} />
-          <h1>Heat</h1>
-        </ControlBox>
-
-        <ControlBox
-          onClk={() => {
-            context?.selectedControl === "humidity"
-              ? context.setSelectedControl(undefined)
-              : context?.setSelectedControl("humidity");
-          }}
-          selected={context?.selectedControl === "humidity"}
-        >
-          <FontAwesomeIcon className="text-5xl" icon={faUmbrella} />
-          <h1>Humidity</h1>
-        </ControlBox>
-
-        <ControlBox
-          onClk={() => {
-            context?.selectedControl === "control"
-              ? context.setSelectedControl(undefined)
-              : context?.setSelectedControl("control");
-          }}
-          selected={context?.selectedControl === "control"}
-        >
+        <ControlBox title="Panel" icon={faGamepad}>
           <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
           <h1>Controlpannel</h1>
         </ControlBox>
 
         <ControlBox
-          onClk={() => {
-            context?.selectedControl === "keel"
-              ? context.setSelectedControl(undefined)
-              : context?.setSelectedControl("keel");
-          }}
-          selected={context?.selectedControl === "keel"}
+          title="Temp"
+          icon={faTemperatureHigh}
+          onOpen={context?.getTemperature}
         >
-          <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
-          <h1>Køl</h1>
+          <EnvironmentDataBox data={context?.data.temperature} />
         </ControlBox>
+
+        <ControlBox title="Heat" icon={faFire} onOpen={context?.getHeat}>
+          <EnvironmentDataBox data={context?.data.heat} />
+        </ControlBox>
+
+        <ControlBox
+          title="Humidity"
+          icon={faUmbrella}
+          onOpen={context?.getHumidity}
+        >
+          <EnvironmentDataBox data={context?.data.humidity} />
+        </ControlBox>
+
+        <ControlBox title="Køl" icon={faGamepad}></ControlBox>
       </YScrollContainer>
     </>
   );

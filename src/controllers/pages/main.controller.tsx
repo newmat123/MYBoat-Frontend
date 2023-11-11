@@ -1,7 +1,7 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 import { ClientApi } from "../../apis/clientAPI";
-import { contextType_, controls, data_ } from "../../shared/types/main.types";
+import { contextType_, data_ } from "../../shared/types/main.types";
 import MainComponent from "../../components/mainComponent";
 
 export const Context = createContext<contextType_ | null>(null);
@@ -10,11 +10,11 @@ function MainPagesController() {
   const [data, setData] = useState<data_>({
     waterInBilge: false,
     temperature: undefined,
-    humidity: undefined,
     heat: undefined,
+    humidity: undefined,
   });
 
-  const [selectedControl, setSelectedControl] = useState<controls>();
+  const [selectedControl, setSelectedControl] = useState<string | undefined>();
 
   const resetBilgeStatus = async () => {
     // console.log("resetWarning handler was called!");
@@ -24,42 +24,43 @@ function MainPagesController() {
     // });
   };
 
-  const handleClkEvent = async () => {
-    switch (selectedControl) {
-      case "temperature":
-        const temperature = await ClientApi.getTemperature();
-        setData((prev) => ({
-          ...prev,
-          temperature: temperature,
-        }));
-        break;
-      case "heat":
-        const heat = await ClientApi.getHeat();
-        setData((prev) => ({
-          ...prev,
-          heat: heat,
-        }));
-        break;
-      case "humidity":
-        const humidity = await ClientApi.getHumidity();
-        setData((prev) => ({
-          ...prev,
-          humidity: humidity,
-        }));
-        break;
+  const getTemperature = async () => {
+    const temperature = await ClientApi.getTemperature();
+    setData((prev) => ({
+      ...prev,
+      temperature: temperature,
+    }));
+  };
 
-      default:
-        break;
+  const getHeat = async () => {
+    const heat = await ClientApi.getHeat();
+    setData((prev) => ({
+      ...prev,
+      heat: heat,
+    }));
+  };
+
+  const getHumidity = async () => {
+    const humidity = await ClientApi.getHumidity();
+    setData((prev) => ({
+      ...prev,
+      humidity: humidity,
+    }));
+  };
+
+  const changeSelected = (selected: boolean, str: string) => {
+    if (selected) {
+      context?.setSelectedControl(undefined);
+    } else {
+      context?.setSelectedControl(str);
     }
   };
 
-  useEffect(() => {
-    if (typeof selectedControl !== undefined) {
-      handleClkEvent();
-    }
-  }, [selectedControl]);
-
   const context = {
+    getTemperature,
+    getHeat,
+    getHumidity,
+    changeSelected,
     resetBilgeStatus,
     setSelectedControl,
     data,

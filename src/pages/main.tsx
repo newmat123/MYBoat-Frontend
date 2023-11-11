@@ -3,7 +3,7 @@ import MainPagesController from "../controllers/pages/main.controller";
 function Main() {
   return (
     <div className="flex justify-center bg-black min-h-screen text-white">
-      <div className="flex flex-col justify-between">
+      <div className="flex flex-col justify-between w-screen">
         <MainPagesController />
       </div>
     </div>

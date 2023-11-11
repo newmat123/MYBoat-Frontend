@@ -1,7 +1,7 @@
 import { environment_ } from "./shared.types";
 
+//might use portal instead
 export type controls =
-  | "wifi"
   | "control"
   | "temperature"
   | "humidity"
@@ -11,9 +11,6 @@ export type controls =
 
 export type data_ = {
   // requestSuccess: boolean;
-  wifiStatus: boolean;
-  ssid: string;
-  pwd: string;
   waterInBilge: boolean;
   temperature: environment_;
   heat: environment_;
@@ -22,8 +19,6 @@ export type data_ = {
 
 export type contextType_ = {
   resetBilgeStatus: () => void;
-  handleSubmit: () => void;
-  handleOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setSelectedControl: (con: controls) => void;
   data: data_;
   selectedControl: controls;

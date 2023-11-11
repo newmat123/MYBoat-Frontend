@@ -1,16 +1,13 @@
 import { createContext, useEffect, useState } from "react";
-import MainComponent from "../../components/mainComponent";
+
 import { ClientApi } from "../../apis/clientAPI";
 import { contextType_, controls, data_ } from "../../shared/types/main.types";
+import MainComponent from "../../components/mainComponent";
 
 export const Context = createContext<contextType_ | null>(null);
 
 function MainPagesController() {
   const [data, setData] = useState<data_>({
-    // requestSuccess: true,
-    wifiStatus: false,
-    ssid: "",
-    pwd: "",
     waterInBilge: false,
     temperature: undefined,
     humidity: undefined,
@@ -19,33 +16,12 @@ function MainPagesController() {
 
   const [selectedControl, setSelectedControl] = useState<controls>();
 
-  // const onFetchEvent = () => {
-  //     !data.requestSuccess && setData({
-  //         ...data,
-  //         requestSuccess: true
-  //     });
-  // }
-
   const resetBilgeStatus = async () => {
-    // onFetchEvent();
     // console.log("resetWarning handler was called!");
     // setData({
     //   ...data,
     //   waterInBilge: await ClientApi.resetBilgeStatus(),
     // });
-  };
-
-  const handleSubmit = async () => {
-    // onFetchEvent();
-    console.log("Post handler was called!");
-    // ClientApi.postWifiCredentials(data.ssid, data.pwd);
-  };
-
-  const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
   };
 
   const handleClkEvent = async () => {
@@ -85,8 +61,6 @@ function MainPagesController() {
 
   const context = {
     resetBilgeStatus,
-    handleSubmit,
-    handleOnchange,
     setSelectedControl,
     data,
     selectedControl,

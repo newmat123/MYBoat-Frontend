@@ -1,18 +1,20 @@
 import { ReactNode, useContext } from "react";
-import EnvironmentDataBox from "./environmentDataBox";
-import Warning from "./warning";
-import WifiConnect from "./wifi";
-import { Context } from "../controllers/pages/main.controller";
-import ControlBox from "./controlBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGamepad,
   faTemperatureHigh,
-  faTowerCell,
   faFire,
   faUmbrella,
+  faGears,
 } from "@fortawesome/free-solid-svg-icons"; // import the icons you need
+
+import EnvironmentDataBox from "./environmentDataBox";
+// import Warning from "./warning";
+// import WifiConnect from "./wifi";
+import { Context } from "../controllers/pages/main.controller";
+import ControlBox from "./controlBox";
 import DataContainer from "./dataContainer";
+import { Link } from "react-router-dom";
 
 function MainComponent() {
   const context = useContext(Context);
@@ -42,12 +44,14 @@ function MainComponent() {
         {context?.selectedControl === "wifi" && <WifiConnect />}
       </DataContainer> */}
 
-      <header>
-        <h1 className="m-5 text-3xl font-extrabold">MYBoat</h1>
+      <header className="flex justify-between m-5">
+        <h1 className="text-3xl font-extrabold">MYBoat</h1>
+        <Link to={"/settings"}>
+          <FontAwesomeIcon className="text-5xl" icon={faGears} />
+        </Link>
       </header>
 
       <DataContainer showDropDown={context?.selectedControl !== undefined}>
-        {context?.selectedControl === "wifi" && <WifiConnect />}
         {context?.selectedControl === "temperature" && (
           <>
             <h1>Temperature</h1>
@@ -103,18 +107,6 @@ function MainComponent() {
         >
           <FontAwesomeIcon className="text-5xl" icon={faUmbrella} />
           <h1>Humidity</h1>
-        </ControlBox>
-
-        <ControlBox
-          onClk={() => {
-            context?.selectedControl === "wifi"
-              ? context.setSelectedControl(undefined)
-              : context?.setSelectedControl("wifi");
-          }}
-          selected={context?.selectedControl === "wifi"}
-        >
-          <FontAwesomeIcon className="text-5xl" icon={faTowerCell} />
-          <h1>Connection</h1>
         </ControlBox>
 
         <ControlBox

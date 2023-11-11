@@ -1,5 +1,5 @@
 import React from "react";
-import { environment_ } from "../controllers/pages/main.controller";
+import { environment_ } from "../shared/types/shared.types";
 
 function EnvironmentDataBox(props: { data: environment_ }) {
   return props.data !== undefined ? (

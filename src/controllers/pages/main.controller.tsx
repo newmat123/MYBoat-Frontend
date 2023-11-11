@@ -1,51 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import MainComponent from "../../components/mainComponent";
 import { ClientApi } from "../../apis/clientAPI";
-
-type controls =
-  | "wifi"
-  | "control"
-  | "temperature"
-  | "humidity"
-  | "heat"
-  | "keel"
-  | undefined;
-
-export type environment_ =
-  | {
-      temperature?: number;
-      heat?: number;
-      humidity?: number;
-      bilgeStatus?: boolean;
-      timestamp?: string;
-    }[]
-  | undefined;
-
-// export type temperature_ =
-//   | { temperature?: number; timestamp?: string }[]
-//   | undefined;
-// export type heat_ = { heat?: number; timestamp?: string }[] | undefined;
-// export type humidity_ = { humidity?: number; timestamp?: string }[] | undefined;
-
-export type data_ = {
-  // requestSuccess: boolean;
-  wifiStatus: boolean;
-  ssid: string;
-  pwd: string;
-  waterInBilge: boolean;
-  temperature: environment_;
-  heat: environment_;
-  humidity: environment_;
-};
-
-type contextType_ = {
-  resetBilgeStatus: () => void;
-  handleSubmit: () => void;
-  handleOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setSelectedControl: (con: controls) => void;
-  data: data_;
-  selectedControl: controls;
-};
+import { contextType_, controls, data_ } from "../../shared/types/main.types";
 
 export const Context = createContext<contextType_ | null>(null);
 

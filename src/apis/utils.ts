@@ -1,4 +1,4 @@
-import { environment_ } from "../controllers/pages/main.controller";
+import { environment_ } from "../shared/types/shared.types";
 
 const countDecimals = (num: number) => {
   if (Math.floor(num) === num) return 0;

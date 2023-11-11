@@ -5,7 +5,6 @@ import { faBackward } from "@fortawesome/free-solid-svg-icons"; // import the ic
 
 import { Context } from "../controllers/pages/settings.controller";
 import WifiConnect from "./wifi";
-import DataContainer from "./dataContainer";
 
 function SettingsComponent() {
   const context = useContext(Context);
@@ -18,9 +17,7 @@ function SettingsComponent() {
           <FontAwesomeIcon className="text-5xl" icon={faBackward} />
         </Link>
       </header>
-      <DataContainer showDropDown={true}>
-        <WifiConnect />
-      </DataContainer>
+      <WifiConnect />
       <div></div>
     </>
   );

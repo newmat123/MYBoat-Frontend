@@ -1,4 +1,4 @@
-# Boatmaneger-Frontend
+# MYBoat-Frontend
 
 # Getting Started with Create React App
 
@@ -47,5 +47,6 @@ REACT_APP_TEST_URL="http://.."
 
 ### `capacitorjs workflow`
 
+yarn cap add android
 yarn cap sync
 yarn cap open android // or ios

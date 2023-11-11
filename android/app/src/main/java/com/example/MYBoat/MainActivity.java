@@ -1,4 +1,4 @@
-package com.boatManeger;
+package com.example.MYBoat;
 
 import com.getcapacitor.BridgeActivity;
 

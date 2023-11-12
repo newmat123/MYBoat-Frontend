@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"; // import the icons you need
 import { Link } from "react-router-dom";
 
-import EnvironmentDataBox from "./environmentDataBox";
+import EnvironmentDisplay from "./environmentDisplay";
 // import Warning from "./warning";
 // import WifiConnect from "./wifi";
 import { Context } from "../controllers/pages/main.controller";
@@ -65,11 +65,11 @@ function MainComponent() {
           icon={faTemperatureHigh}
           onOpen={context?.getTemperature}
         >
-          <EnvironmentDataBox data={context?.data.temperature} />
+          <EnvironmentDisplay data={context?.data.temperature} />
         </ControlBox>
 
         <ControlBox title="Heat" icon={faFire} onOpen={context?.getHeat}>
-          <EnvironmentDataBox data={context?.data.heat} />
+          <EnvironmentDisplay data={context?.data.heat} />
         </ControlBox>
 
         <ControlBox
@@ -77,7 +77,7 @@ function MainComponent() {
           icon={faUmbrella}
           onOpen={context?.getHumidity}
         >
-          <EnvironmentDataBox data={context?.data.humidity} />
+          <EnvironmentDisplay data={context?.data.humidity} />
         </ControlBox>
 
         <ControlBox title="Køl" icon={faGamepad}></ControlBox>

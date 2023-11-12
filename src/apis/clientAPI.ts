@@ -25,7 +25,7 @@ export const ClientApi = {
   getTemperature: async function (cancel = false) {
     try {
       const response = await api.request({
-        url: `/temperature`,
+        url: `/temperature?take=10`,
         method: "GET",
         signal: cancel
           ? cancelApiObject[
@@ -42,7 +42,7 @@ export const ClientApi = {
   getHeat: async function (cancel = false) {
     try {
       const response = await api.request({
-        url: `/heat`,
+        url: `/heat?take=10`,
         method: "GET",
         signal: cancel
           ? cancelApiObject[this.getHeat.name].handleRequestCancellation()
@@ -58,7 +58,7 @@ export const ClientApi = {
   getHumidity: async function (cancel = false) {
     try {
       const response = await api.request({
-        url: `/humidity`,
+        url: `/humidity?take=10`,
         method: "GET",
         signal: cancel
           ? cancelApiObject[this.getHumidity.name].handleRequestCancellation()

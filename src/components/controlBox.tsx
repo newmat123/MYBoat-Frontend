@@ -16,23 +16,24 @@ function ControlBox(props: {
   const selected = props.title === context?.selectedControl;
 
   return (
-    <div className="flex w-full h-full justify-center">
-      <div
-        className="flex flex-col w-24 h-24 my-2 rounded-md justify-center p-2"
-        onClick={() => {
-          context?.changeSelected(selected, props.title);
-          props.onOpen && props.onOpen();
-        }}
-        style={{
-          backgroundColor: selected ? "#00AA00" : "#006700",
-        }}
-      >
-        <FontAwesomeIcon className="text-5xl" icon={props.icon ?? faDeaf} />
-        <h1>{props.title}</h1>
-
-        <DataContainer showDropDown={selected}>{props.children}</DataContainer>
+    <>
+      <div className="flex w-full h-full justify-center">
+        <div
+          className="flex flex-col w-24 h-24 my-2 rounded-md justify-center p-2"
+          onClick={() => {
+            context?.changeSelected(selected, props.title);
+            props.onOpen && props.onOpen();
+          }}
+          style={{
+            backgroundColor: selected ? "#00AA00" : "#006700",
+          }}
+        >
+          <FontAwesomeIcon className="text-5xl" icon={props.icon ?? faDeaf} />
+          <h1>{props.title}</h1>
+        </div>
       </div>
-    </div>
+      <DataContainer showDropDown={selected}>{props.children}</DataContainer>
+    </>
   );
 }
 

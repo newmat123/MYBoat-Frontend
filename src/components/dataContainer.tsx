@@ -14,7 +14,7 @@ function DataContainer(props: { showDropDown: boolean; children: ReactNode }) {
     } else {
       setHeight(0);
     }
-  }, [context?.selectedControl]);
+  }, [props.showDropDown, props.children]);
 
   try {
     return ReactDOM.createPortal(

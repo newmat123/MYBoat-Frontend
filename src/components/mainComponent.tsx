@@ -7,14 +7,14 @@ import {
   faUmbrella,
   faGears,
 } from "@fortawesome/free-solid-svg-icons"; // import the icons you need
+import { Link } from "react-router-dom";
 
 import EnvironmentDataBox from "./environmentDataBox";
 // import Warning from "./warning";
 // import WifiConnect from "./wifi";
 import { Context } from "../controllers/pages/main.controller";
 import ControlBox from "./controlBox";
-import DataContainer from "./dataContainer";
-import { Link } from "react-router-dom";
+import ControlPanel from "./controlPanel";
 
 function MainComponent() {
   const context = useContext(Context);
@@ -45,7 +45,9 @@ function MainComponent() {
       </DataContainer> */}
 
       <header className="flex justify-between m-5">
+        {/* <div className=" bg-slate-400 rounded-lg flex items-center sm:px-20 sm:py-4 px-5 py-2"> */}
         <h1 className="text-3xl font-extrabold">MYBoat</h1>
+        {/* </div> */}
         <Link to={"/settings"}>
           <FontAwesomeIcon className="text-5xl" icon={faGears} />
         </Link>
@@ -55,8 +57,7 @@ function MainComponent() {
 
       <YScrollContainer>
         <ControlBox title="Panel" icon={faGamepad}>
-          <FontAwesomeIcon className="text-5xl" icon={faGamepad} />
-          <h1>Controlpannel</h1>
+          <ControlPanel />
         </ControlBox>
 
         <ControlBox

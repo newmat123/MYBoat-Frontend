@@ -15,6 +15,7 @@ import EnvironmentDisplay from "./environmentDisplay";
 import { Context } from "../controllers/pages/main.controller";
 import ControlBox from "./controlBox";
 import ControlPanel from "./controlPanel";
+import BilgeDisplay from "./bilgeDisplay";
 
 function MainComponent() {
   const context = useContext(Context);
@@ -80,17 +81,23 @@ function MainComponent() {
           <EnvironmentDisplay data={context?.data.humidity} />
         </ControlBox>
 
-        <ControlBox title="Køl" icon={faGamepad}></ControlBox>
+        <ControlBox
+          title="Køl"
+          icon={faGamepad}
+          onOpen={context?.getBilgeStatus}
+        >
+          <BilgeDisplay data={context?.data.bilgeStatus} />
+        </ControlBox>
       </YScrollContainer>
     </>
   );
 }
 
-const YScrollContainer = (Props: { children: ReactNode }) => {
+const YScrollContainer = (props: { children: ReactNode }) => {
   return (
     <div className=" mb-10 flex justify-center w-screen ">
       <div className=" overflow-x-auto ">
-        <div className="flex space-x-2 px-2">{Props.children}</div>
+        <div className="flex space-x-2 px-2">{props.children}</div>
       </div>
     </div>
   );

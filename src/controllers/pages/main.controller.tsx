@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 
-import { ClientApi } from "../../apis/clientAPI";
+import { ServerAPI } from "../../apis/serverAPI";
 import { contextType_, data_ } from "../../shared/types/main.types";
 import MainComponent from "../../components/mainComponent";
 
@@ -8,7 +8,7 @@ export const Context = createContext<contextType_ | null>(null);
 
 function MainPagesController() {
   const [data, setData] = useState<data_>({
-    waterInBilge: false,
+    bilgeStatus: undefined,
     temperature: undefined,
     heat: undefined,
     humidity: undefined,
@@ -25,7 +25,7 @@ function MainPagesController() {
   };
 
   const getTemperature = async () => {
-    const temperature = await ClientApi.getTemperature();
+    const temperature = await ServerAPI.getTemperature();
     setData((prev) => ({
       ...prev,
       temperature: temperature,
@@ -33,7 +33,7 @@ function MainPagesController() {
   };
 
   const getHeat = async () => {
-    const heat = await ClientApi.getHeat();
+    const heat = await ServerAPI.getHeat();
     setData((prev) => ({
       ...prev,
       heat: heat,
@@ -41,10 +41,18 @@ function MainPagesController() {
   };
 
   const getHumidity = async () => {
-    const humidity = await ClientApi.getHumidity();
+    const humidity = await ServerAPI.getHumidity();
     setData((prev) => ({
       ...prev,
       humidity: humidity,
+    }));
+  };
+
+  const getBilgeStatus = async () => {
+    const bilgeStatus = await ServerAPI.getBilgeStatus();
+    setData((prev) => ({
+      ...prev,
+      bilgeStatus: bilgeStatus,
     }));
   };
 
@@ -60,8 +68,9 @@ function MainPagesController() {
     getTemperature,
     getHeat,
     getHumidity,
-    changeSelected,
+    getBilgeStatus,
     resetBilgeStatus,
+    changeSelected,
     setSelectedControl,
     data,
     selectedControl,

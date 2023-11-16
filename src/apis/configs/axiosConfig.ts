@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const api = axios.create({
+export const serverApi = axios.create({
   baseURL: process.env.REACT_APP_EXSPRESS_BACKEND,
 });
 // REACT_APP_EXSPRESS_BACKEND
@@ -19,6 +19,6 @@ const errorHandler = (error: any) => {
 
 // registering the custom error handler to the
 // "api" axios instance
-api.interceptors.response.use(undefined, (error) => {
+serverApi.interceptors.response.use(undefined, (error) => {
   return errorHandler(error);
 });

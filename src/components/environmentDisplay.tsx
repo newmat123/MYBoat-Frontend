@@ -13,6 +13,17 @@ import {
 
 import { environment_ } from "../shared/types/shared.types";
 
+const processDataLabels = (data: environment_) => {
+  return data
+    ?.map((val) => val.timestamp?.split("T")[1].split(":")[0])
+    .reverse();
+};
+const processData = (data: environment_) => {
+  return data
+    ?.map((val) => val.temperature ?? val.heat ?? val.humidity)
+    .reverse();
+};
+
 function EnvironmentDisplay(props: { data: environment_ }) {
   ChartJS.register(
     CategoryScale,
@@ -35,18 +46,21 @@ function EnvironmentDisplay(props: { data: environment_ }) {
         text: "Environment Chart",
       },
     },
+    scales: {
+      y: {
+        //should be changeable
+        suggestedMin: 20,
+        suggestedMax: 25,
+      },
+    },
   };
 
   const data = {
-    labels: props.data?.map(
-      (val) => val.timestamp?.split("T")[1].split(":")[0]
-    ),
+    labels: processDataLabels(props.data),
     datasets: [
       {
-        label: "val",
-        data: props.data?.map(
-          (val) => val.temperature ?? val.heat ?? val.humidity
-        ),
+        label: "Today",
+        data: processData(props.data),
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },

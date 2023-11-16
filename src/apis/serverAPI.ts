@@ -1,10 +1,10 @@
-import { api } from "./configs/axiosConfig";
+import { serverApi } from "./configs/axiosConfig";
 import { defineCancelApiObject } from "./configs/axiosUtils";
 
-export const ClientApi = {
+export const ServerAPI = {
   getEnvironment: async function (cancel = false) {
     try {
-      const response = await api.request({
+      const response = await serverApi.request({
         url: "/environment",
         method: "GET",
         // retrieving the signal value by using the property name
@@ -21,10 +21,10 @@ export const ClientApi = {
       return undefined;
     }
   },
-  getTemperature: async function (cancel = false) {
+  getTemperature: async function (take = 24, cancel = false) {
     try {
-      const response = await api.request({
-        url: `/temperature?take=10`,
+      const response = await serverApi.request({
+        url: `/temperature?take=${take}`,
         method: "GET",
         signal: cancel
           ? cancelApiObject[
@@ -38,10 +38,10 @@ export const ClientApi = {
       return undefined;
     }
   },
-  getHeat: async function (cancel = false) {
+  getHeat: async function (take = 24, cancel = false) {
     try {
-      const response = await api.request({
-        url: `/heat?take=10`,
+      const response = await serverApi.request({
+        url: `/heat?take=${take}`,
         method: "GET",
         signal: cancel
           ? cancelApiObject[this.getHeat.name].handleRequestCancellation()
@@ -54,10 +54,10 @@ export const ClientApi = {
       return undefined;
     }
   },
-  getHumidity: async function (cancel = false) {
+  getHumidity: async function (take = 24, cancel = false) {
     try {
-      const response = await api.request({
-        url: `/humidity?take=10`,
+      const response = await serverApi.request({
+        url: `/humidity?take=${take}`,
         method: "GET",
         signal: cancel
           ? cancelApiObject[this.getHumidity.name].handleRequestCancellation()
@@ -72,7 +72,7 @@ export const ClientApi = {
   },
   getBilgeStatus: async function (cancel = false) {
     try {
-      const response = await api.request({
+      const response = await serverApi.request({
         url: "/bilgeStatus",
         method: "GET",
         signal: cancel
@@ -81,7 +81,7 @@ export const ClientApi = {
             ].handleRequestCancellation().signal
           : undefined,
       });
-      return response.data.bilgeStatus[0];
+      return response.data;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;
@@ -136,4 +136,4 @@ export const ClientApi = {
 };
 
 // defining the cancel API object for ProductAPI
-const cancelApiObject = defineCancelApiObject(ClientApi);
+const cancelApiObject = defineCancelApiObject(ServerAPI);

@@ -19,7 +19,7 @@ function DataContainer(props: { showDropDown: boolean; children: ReactNode }) {
   try {
     return ReactDOM.createPortal(
       <div
-        className="w-full bg-[#212121] overflow-hidden"
+        className="w-full bg-[#303030] overflow-hidden"
         style={{ height, transition: "height 0.2s ease-in-out" }}
       >
         <div ref={ref}>{props.children}</div>

@@ -62,7 +62,7 @@ function EnvironmentDisplay(props: { data: environment_ }) {
   return props.data !== undefined ? (
     <>
       <div className="flex justify-end px-4 pt-4">
-        <div className=" bg-black rounded-full px-2">
+        <div className=" bg-[#252525] rounded-full px-2">
           {props.data[0].temperature} {props.data[0].temperature && "C"}
           {props.data[0].heat} {props.data[0].heat && "C"}
           {props.data[0].humidity} {props.data[0].humidity && "%"}

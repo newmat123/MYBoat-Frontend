@@ -1,6 +1,5 @@
 import { api } from "./configs/axiosConfig";
 import { defineCancelApiObject } from "./configs/axiosUtils";
-import { roundNumber } from "./utils";
 
 export const ClientApi = {
   getEnvironment: async function (cancel = false) {
@@ -33,7 +32,7 @@ export const ClientApi = {
             ].handleRequestCancellation().signal
           : undefined,
       });
-      return roundNumber(response.data);
+      return response.data;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;
@@ -49,7 +48,7 @@ export const ClientApi = {
               .signal
           : undefined,
       });
-      return roundNumber(response.data);
+      return response.data;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;
@@ -65,7 +64,7 @@ export const ClientApi = {
               .signal
           : undefined,
       });
-      return roundNumber(response.data);
+      return response.data;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;

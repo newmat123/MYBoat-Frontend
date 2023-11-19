@@ -11,20 +11,43 @@ import {
   Legend,
 } from "chart.js";
 
-import { environment_ } from "../shared/types/shared.types";
+import { environment_, environmentByDays_ } from "../shared/types/shared.types";
 
-const processDataLabels = (data: environment_) => {
-  return data
-    ?.map((val) => val.timestamp?.split("T")[1].split(":")[0])
-    .reverse();
-};
-const processData = (data: environment_) => {
-  return data
-    ?.map((val) => val.temperature ?? val.heat ?? val.humidity)
-    .reverse();
+const getHour = (str: string | undefined) => {
+  return str !== undefined ? str.split("T")[1].split(":")[0] : "null";
 };
 
-function EnvironmentDisplay(props: { data: environment_ }) {
+const relevantLabels = (data: environmentByDays_) => {
+  if (data === undefined) {
+    return [];
+  }
+  const labels: string[] = Array.from(
+    new Set(
+      data.flatMap((innerArray) =>
+        innerArray.map((item) => getHour(item.timestamp))
+      )
+    )
+  );
+  return labels.sort();
+};
+
+const processData = (data: environment_, hours: string[]) => {
+  if (data === undefined) {
+    return;
+  }
+  const dataList: (number | null)[] = hours.map((hour) => {
+    const indexInB = data.findIndex((item) => getHour(item.timestamp) === hour);
+    return indexInB !== -1
+      ? data[indexInB].temperature ??
+          data[indexInB].heat ??
+          data[indexInB].humidity ??
+          null
+      : null;
+  });
+  return dataList;
+};
+
+function EnvironmentDisplay(props: { data: environmentByDays_ }) {
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -55,41 +78,34 @@ function EnvironmentDisplay(props: { data: environment_ }) {
     },
   };
 
+  const labels = relevantLabels(props.data);
   const data = {
-    labels: processDataLabels(props.data),
+    labels: labels,
     datasets: [
       {
         label: "Today",
-        data: processData(props.data),
+        data: processData(props.data ? props.data[0] : undefined, labels),
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
-      // {
-      //   label: "Dataset 2",
-      //   data: labels.map(() => 3),
-      //   borderColor: "rgb(53, 162, 235)",
-      //   backgroundColor: "rgba(53, 162, 235, 0.5)",
-      // },
+      {
+        label: "yesterday",
+        data: processData(props.data ? props.data[1] : undefined, labels),
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
     ],
   };
 
   return props.data !== undefined ? (
-    <>
-      <div className="flex justify-end px-4 pt-4">
-        <div className=" bg-[#252525] rounded-full px-2">
-          {props.data[0].temperature} {props.data[0].temperature && "C"}
-          {props.data[0].heat} {props.data[0].heat && "C"}
-          {props.data[0].humidity} {props.data[0].humidity && "%"}
-        </div>
+    <div className="flex justify-center relative">
+      <div className=" bg-[#252525] rounded-full px-2 absolute top-2 right-2">
+        {props.data[0][0].temperature} {props.data[0][0].temperature && "C"}
+        {props.data[0][0].heat} {props.data[0][0].heat && "C"}
+        {props.data[0][0].humidity} {props.data[0][0].humidity && "%"}
       </div>
-      <div className="flex justify-center">
-        <Line
-          options={options}
-          data={data}
-          className=" max-h-[65vh] max-w-5xl"
-        />
-      </div>
-    </>
+      <Line options={options} data={data} className=" max-h-[65vh] max-w-5xl" />
+    </div>
   ) : (
     <div className="flex justify-center py-10">
       <ThreeCircles

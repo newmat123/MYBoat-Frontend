@@ -1,11 +1,11 @@
-import { environment_ } from "./shared.types";
+import { environmentByDays_, environment_ } from "./shared.types";
 
 export type data_ = {
   // requestSuccess: boolean;
   bilgeStatus: environment_;
-  temperature: environment_;
-  heat: environment_;
-  humidity: environment_;
+  temperature: environmentByDays_;
+  heat: environmentByDays_;
+  humidity: environmentByDays_;
 };
 
 export type contextType_ = {

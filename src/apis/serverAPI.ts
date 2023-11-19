@@ -1,5 +1,7 @@
+import { environmentByDays_ } from "../shared/types/shared.types";
 import { serverApi } from "./configs/axiosConfig";
 import { defineCancelApiObject } from "./configs/axiosUtils";
+import { splitByDays } from "./utils";
 
 export const ServerAPI = {
   getEnvironment: async function (cancel = false) {
@@ -15,7 +17,8 @@ export const ServerAPI = {
           : undefined,
       });
       // returning the product returned by the API
-      return response.data;
+      const days: environmentByDays_ = splitByDays(response.data);
+      return days;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;
@@ -32,7 +35,8 @@ export const ServerAPI = {
             ].handleRequestCancellation().signal
           : undefined,
       });
-      return response.data;
+      const days: environmentByDays_ = splitByDays(response.data);
+      return days;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;
@@ -48,7 +52,8 @@ export const ServerAPI = {
               .signal
           : undefined,
       });
-      return response.data;
+      const days: environmentByDays_ = splitByDays(response.data);
+      return days;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;
@@ -64,7 +69,8 @@ export const ServerAPI = {
               .signal
           : undefined,
       });
-      return response.data;
+      const days: environmentByDays_ = splitByDays(response.data);
+      return days;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;

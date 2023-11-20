@@ -23,17 +23,13 @@ function MainComponent() {
   return (
     <>
       {/* <div className="absolute w-10 top-1 right-1">
-                <button onClick={context.reloadApp}>
-                    <img src="reload.ico" alt="" />
-                </button>
-            </div>
-
-            <Warning onClk={context.resetWarning} show={context.data.waterInBilge} >
-                Der er detekteret vand i kølen.
-            </Warning>
-            <Warning onClk={context.reloadApp} show={!context.data.requestSuccess} >
-                Noget gik galt. Tjek din forbindelse og prøv igen.
-            </Warning> */}
+        <button onClick={() => console.log("reset køl")}>
+          <img src="reload.ico" alt="" />
+        </button>
+      </div> */}
+      {/* <Warning onClk={context.reloadApp} show={!context.data.requestSuccess}>
+        Noget gik galt. Tjek din forbindelse og prøv igen.
+      </Warning> */}
 
       {/* <DataContainer
         showDropDown={
@@ -53,6 +49,13 @@ function MainComponent() {
           <FontAwesomeIcon className="text-5xl" icon={faGears} />
         </Link>
       </header>
+
+      {/* <Warning
+        onClk={() => console.log("reset køl")}
+        show={context?.data.bilgeStatus}
+      >
+        Der er detekteret vand i kølen.
+      </Warning> */}
 
       <section id="displayDataPortal"></section>
 

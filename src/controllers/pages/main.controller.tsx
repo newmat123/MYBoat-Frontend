@@ -17,11 +17,12 @@ function MainPagesController() {
   const [selectedControl, setSelectedControl] = useState<string | undefined>();
 
   const resetBilgeStatus = async () => {
-    // console.log("resetWarning handler was called!");
-    // setData({
-    //   ...data,
-    //   waterInBilge: await ClientApi.resetBilgeStatus(),
-    // });
+    console.log("resetWarning handler was called!");
+    const bilgeStatus = await ServerAPI.resetBilgeStatus();
+    setData((prev) => ({
+      ...prev,
+      bilgeStatus: bilgeStatus,
+    }));
   };
 
   const getTemperature = async () => {

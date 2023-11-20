@@ -93,6 +93,23 @@ export const ServerAPI = {
       return undefined;
     }
   },
+  resetBilgeStatus: async function (cancel = false) {
+    try {
+      const response = await serverApi.request({
+        url: `/resetBilgeStatus`,
+        method: "PUT",
+        signal: cancel
+          ? cancelApiObject[
+              this.getBilgeStatus.name
+            ].handleRequestCancellation().signal
+          : undefined,
+      });
+      return response.data;
+    } catch {
+      console.log("couldn't fetch environment");
+      return undefined;
+    }
+  },
 
   // getWifiStatus: async function (cancel = false) {
   //   const response = await api.request({
@@ -100,17 +117,6 @@ export const ServerAPI = {
   //     method: "GET",
   //     signal: cancel
   //       ? cancelApiObject[this.getWifiStatus.name].handleRequestCancellation()
-  //           .signal
-  //       : undefined,
-  //   });
-  //   return response.data.value;
-  // },
-  // resetBilgeStatus: async function (cancel = false) {
-  //   const response = await api.request({
-  //     url: "/resetBilgeStatus",
-  //     method: "GET",
-  //     signal: cancel
-  //       ? cancelApiObject[this.getBilgeStatus.name].handleRequestCancellation()
   //           .signal
   //       : undefined,
   //   });

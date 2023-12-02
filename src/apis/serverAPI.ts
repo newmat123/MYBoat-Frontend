@@ -1,13 +1,13 @@
 import { environmentByDays_ } from "../shared/types/shared.types";
 import { serverApi } from "./configs/axiosConfig";
 import { defineCancelApiObject } from "./configs/axiosUtils";
-import { splitByDays } from "./utils";
+import { roundNumber, splitByDays } from "./utils";
 
 export const ServerAPI = {
-  getEnvironment: async function (cancel = false) {
+  getEnvironment: async function (take = 73, cancel = false) {
     try {
       const response = await serverApi.request({
-        url: "/environment",
+        url: `/environment?take=${take}`,
         method: "GET",
         // retrieving the signal value by using the property name
         signal: cancel
@@ -17,14 +17,14 @@ export const ServerAPI = {
           : undefined,
       });
       // returning the product returned by the API
-      const days: environmentByDays_ = splitByDays(response.data);
+      const days: environmentByDays_ = splitByDays(roundNumber(response.data));
       return days;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;
     }
   },
-  getTemperature: async function (take = 24, cancel = false) {
+  getTemperature: async function (take = 73, cancel = false) {
     try {
       const response = await serverApi.request({
         url: `/temperature?take=${take}`,
@@ -35,14 +35,14 @@ export const ServerAPI = {
             ].handleRequestCancellation().signal
           : undefined,
       });
-      const days: environmentByDays_ = splitByDays(response.data);
+      const days: environmentByDays_ = splitByDays(roundNumber(response.data));
       return days;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;
     }
   },
-  getHeat: async function (take = 24, cancel = false) {
+  getHeat: async function (take = 73, cancel = false) {
     try {
       const response = await serverApi.request({
         url: `/heat?take=${take}`,
@@ -52,14 +52,14 @@ export const ServerAPI = {
               .signal
           : undefined,
       });
-      const days: environmentByDays_ = splitByDays(response.data);
+      const days: environmentByDays_ = splitByDays(roundNumber(response.data));
       return days;
     } catch {
       console.log("couldn't fetch environment");
       return undefined;
     }
   },
-  getHumidity: async function (take = 24, cancel = false) {
+  getHumidity: async function (take = 73, cancel = false) {
     try {
       const response = await serverApi.request({
         url: `/humidity?take=${take}`,
@@ -69,7 +69,7 @@ export const ServerAPI = {
               .signal
           : undefined,
       });
-      const days: environmentByDays_ = splitByDays(response.data);
+      const days: environmentByDays_ = splitByDays(roundNumber(response.data));
       return days;
     } catch {
       console.log("couldn't fetch environment");

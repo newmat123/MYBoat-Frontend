@@ -1,13 +1,11 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward } from "@fortawesome/free-solid-svg-icons"; // import the icons you need
 
-import { Context } from "../controllers/pages/settings.controller";
 import WifiConnect from "./wifi";
 
 function SettingsComponent() {
-  const context = useContext(Context);
+  // const context = useContext(Context);
 
   return (
     <>
@@ -18,7 +16,6 @@ function SettingsComponent() {
         </Link>
       </header>
       <WifiConnect />
-      <div></div>
     </>
   );
 }

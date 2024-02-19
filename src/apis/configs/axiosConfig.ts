@@ -1,8 +1,60 @@
 import axios from "axios";
+import { CapacitorWifiConnect } from "@falconeta/capacitor-wifi-connect";
 
-export const serverApi = axios.create({
-  baseURL: process.env.REACT_APP_EXSPRESS_BACKEND,
-});
+var url_ = process.env.REACT_APP_EXSPRESS_BACKEND;
+
+const updateConnection = async () => {
+  if (process.env.REACT_APP_SOFT_AP_SSID === undefined) {
+    throw new Error("REACT_APP_SOFT_AP_SSID is not defined in .env.local");
+  }
+
+  // if ((await CapacitorWifiConnect.getAppSSID()).status === 0) {
+  //   url_ = process.env.REACT_APP_SOFT_AP;
+  //   return;
+  // }
+  const currentSsid = await CapacitorWifiConnect.getDeviceSSID(); // Maybe getAppSSID
+  if (currentSsid.value === process.env.REACT_APP_SOFT_AP_SSID) {
+    url_ = process.env.REACT_APP_SOFT_AP;
+    return;
+  }
+
+  const ssid = await CapacitorWifiConnect.getSSIDs();
+  if (!ssid.value.includes(process.env.REACT_APP_SOFT_AP_SSID)) {
+    url_ = process.env.REACT_APP_EXSPRESS_BACKEND;
+    return;
+  }
+
+  if (process.env.REACT_APP_SOFT_AP_PASSWORD === undefined) {
+    throw new Error("REACT_APP_SOFT_AP_PASSWORD is not defined in .env.local");
+  }
+
+  CapacitorWifiConnect.connect({
+    ssid: process.env.REACT_APP_SOFT_AP_SSID,
+    saveNetwork: true,
+  }).then((res) => {
+    if (res.value === 0) {
+      url_ = process.env.REACT_APP_SOFT_AP_SSID;
+    }
+  });
+  // CapacitorWifiConnect.secureConnect({
+  //   ssid: process.env.REACT_APP_SOFT_AP_SSID,
+  //   password: process.env.REACT_APP_SOFT_AP_PASSWORD,
+  //   saveNetwork: true,
+  // }).then((res) => {
+  //   if (res.value === 0) {
+  //     url_ = process.env.REACT_APP_SOFT_AP_SSID;
+  //   }
+  // });
+};
+
+export const serverApi = () => {
+  updateConnection();
+  return axios.create({
+    baseURL: url_,
+  });
+};
+
+// process.env.REACT_APP_EXSPRESS_BACKEND
 // REACT_APP_EXSPRESS_BACKEND
 
 // defining a custom error handler for all APIs
@@ -19,6 +71,6 @@ const errorHandler = (error: any) => {
 
 // registering the custom error handler to the
 // "api" axios instance
-serverApi.interceptors.response.use(undefined, (error) => {
+serverApi().interceptors.response.use(undefined, (error) => {
   return errorHandler(error);
 });

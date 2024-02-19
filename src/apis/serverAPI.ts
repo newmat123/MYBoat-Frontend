@@ -6,7 +6,7 @@ import { roundNumber, splitByDays } from "./utils";
 export const ServerAPI = {
   getEnvironment: async function (take = 73, cancel = false) {
     try {
-      const response = await serverApi.request({
+      const response = await serverApi().request({
         url: `/environment?take=${take}`,
         method: "GET",
         // retrieving the signal value by using the property name
@@ -26,7 +26,7 @@ export const ServerAPI = {
   },
   getTemperature: async function (take = 73, cancel = false) {
     try {
-      const response = await serverApi.request({
+      const response = await serverApi().request({
         url: `/temperature?take=${take}`,
         method: "GET",
         signal: cancel
@@ -44,7 +44,7 @@ export const ServerAPI = {
   },
   getHeat: async function (take = 73, cancel = false) {
     try {
-      const response = await serverApi.request({
+      const response = await serverApi().request({
         url: `/heat?take=${take}`,
         method: "GET",
         signal: cancel
@@ -61,7 +61,7 @@ export const ServerAPI = {
   },
   getHumidity: async function (take = 73, cancel = false) {
     try {
-      const response = await serverApi.request({
+      const response = await serverApi().request({
         url: `/humidity?take=${take}`,
         method: "GET",
         signal: cancel
@@ -78,7 +78,7 @@ export const ServerAPI = {
   },
   getBilgeStatus: async function (cancel = false) {
     try {
-      const response = await serverApi.request({
+      const response = await serverApi().request({
         url: "/bilgeStatus",
         method: "GET",
         signal: cancel
@@ -95,7 +95,7 @@ export const ServerAPI = {
   },
   resetBilgeStatus: async function (cancel = false) {
     try {
-      const response = await serverApi.request({
+      const response = await serverApi().request({
         url: `/resetBilgeStatus`,
         method: "PUT",
         signal: cancel

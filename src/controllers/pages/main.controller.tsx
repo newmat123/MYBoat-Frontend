@@ -1,7 +1,11 @@
 import { createContext, useState } from "react";
 
 import { ServerAPI } from "../../apis/serverAPI";
-import { contextType_, data_ } from "../../shared/types/main.types";
+import {
+  contextType_,
+  data_,
+  controlPanel,
+} from "../../shared/types/main.types";
 import MainComponent from "../../components/mainComponent";
 
 export const Context = createContext<contextType_ | null>(null);
@@ -15,6 +19,10 @@ function MainPagesController() {
   });
 
   const [selectedControl, setSelectedControl] = useState<string | undefined>();
+  const [controlPanel, setControlPanel] = useState<controlPanel>({
+    light: false,
+    heater: false,
+  });
 
   const resetBilgeStatus = async () => {
     console.log("resetWarning handler was called!");
@@ -59,9 +67,21 @@ function MainPagesController() {
 
   const changeSelected = (selected: boolean, str: string) => {
     if (selected) {
-      context?.setSelectedControl(undefined);
+      setSelectedControl(undefined);
     } else {
-      context?.setSelectedControl(str);
+      setSelectedControl(str);
+    }
+  };
+
+  const controlPanelChange = async (val: Partial<controlPanel>) => {
+    const originalControlPanel = controlPanel;
+    setControlPanel((prev) => Object.assign(prev, val));
+    const res = await ServerAPI.postControlPanel(controlPanel);
+
+    console.log("res");
+    console.log(res);
+    if (false) {
+      setControlPanel(originalControlPanel);
     }
   };
 
@@ -73,7 +93,9 @@ function MainPagesController() {
     resetBilgeStatus,
     changeSelected,
     setSelectedControl,
+    controlPanelChange,
     data,
+    controlPanel,
     selectedControl,
   };
 

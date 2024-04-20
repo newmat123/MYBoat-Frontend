@@ -1,3 +1,4 @@
+import { controlPanel } from "../shared/types/main.types";
 import { environmentByDays_ } from "../shared/types/shared.types";
 import { serverApi } from "./configs/axiosConfig";
 import { defineCancelApiObject } from "./configs/axiosUtils";
@@ -100,7 +101,31 @@ export const ServerAPI = {
         method: "PUT",
         signal: cancel
           ? cancelApiObject[
-              this.getBilgeStatus.name
+              this.resetBilgeStatus.name
+            ].handleRequestCancellation().signal
+          : undefined,
+      });
+      return response.data;
+    } catch {
+      console.log("couldn't fetch environment");
+      return undefined;
+    }
+  },
+  postControlPanel: async function (
+    controlPanel: controlPanel,
+    cancel = false
+  ) {
+    try {
+      const response = await serverApi().request({
+        url: `/controlPanel`,
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+        data: controlPanel,
+        signal: cancel
+          ? cancelApiObject[
+              this.postControlPanel.name
             ].handleRequestCancellation().signal
           : undefined,
       });

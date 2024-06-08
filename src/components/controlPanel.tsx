@@ -1,48 +1,44 @@
 import { Switch } from "@mui/material";
 import { useContext } from "react";
 import { Context } from "../controllers/pages/main.controller";
+import { switch_ } from "../shared/types/main.types";
 
-function ControlPanel(props: {}) {
-  const context = useContext(Context);
+export const ControlPanel = (props: {}) => {
+	const context = useContext(Context);
 
-  return (
-    <div className=" text-center">
-      <h1>Kontrol panel</h1>
+	return (
+		<div className=" text-center">
+			<h1>Kontrol panel</h1>
 
-      <div className=" flex space-x-10 justify-center">
-        <div className="flex justify-end py-5">
-          <div>
-            <div className=" flex justify-between w-full">
-              <Switch
-                value={context?.controlPanel?.light}
-                onChange={() =>
-                  context?.controlPanelChange({
-                    light: !context?.controlPanel.light,
-                  })
-                }
-              />
-              Lys
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-start py-5">
-          <div>
-            <div className=" flex justify-between w-full">
-              <Switch
-                value={context?.controlPanel?.heater}
-                onChange={() =>
-                  context?.controlPanelChange({
-                    heater: !context?.controlPanel.heater,
-                  })
-                }
-              />
-              Fyr
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+			<div className="grid grid-cols-2 gap-3 m-7">
+				{context?.controlPanel.map((sw) => (
+					<PanelSwitch
+						key={sw.id}
+						concreteSwitch={sw}
+						onSwitchChange={context?.onSwitchChange}
+					/>
+				))}
+			</div>
+		</div>
+	);
+};
 
-export default ControlPanel;
+const PanelSwitch = (props: {
+	concreteSwitch: switch_;
+	onSwitchChange: (val: switch_) => void;
+}) => {
+	return (
+		<div className=" flex justify-center bg-[#383838] p-3 m-auto rounded-xl shadow-inner">
+			<Switch
+				value={props.concreteSwitch.state}
+				onChange={() =>
+					props.onSwitchChange({
+						...props.concreteSwitch,
+						state: !props.concreteSwitch.state,
+					})
+				}
+			/>
+			{props.concreteSwitch.switchName}
+		</div>
+	);
+};

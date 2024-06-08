@@ -1,10 +1,10 @@
-import { controlPanel } from "../shared/types/main.types";
+import { switch_ } from "../shared/types/main.types";
 import { environmentByDays_ } from "../shared/types/shared.types";
 import { serverApi } from "./configs/axiosConfig";
 import { defineCancelApiObject } from "./configs/axiosUtils";
 import { roundNumber, splitByDays } from "./utils";
 
-export const ServerAPI = {
+export const API = {
   getEnvironment: async function (take = 73, cancel = false) {
     try {
       const response = await serverApi().request({
@@ -112,17 +112,17 @@ export const ServerAPI = {
     }
   },
   postControlPanel: async function (
-    controlPanel: controlPanel,
+    concreteSwitch: switch_,
     cancel = false
   ) {
     try {
       const response = await serverApi().request({
-        url: `/controlPanel`,
+        url: `/switch`,
         method: "PUT",
         headers: {
           "content-type": "application/json",
         },
-        data: controlPanel,
+        data: concreteSwitch,
         signal: cancel
           ? cancelApiObject[
               this.postControlPanel.name
@@ -173,4 +173,4 @@ export const ServerAPI = {
 };
 
 // defining the cancel API object for ProductAPI
-const cancelApiObject = defineCancelApiObject(ServerAPI);
+const cancelApiObject = defineCancelApiObject(API);

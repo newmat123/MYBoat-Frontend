@@ -8,9 +8,10 @@ export type data_ = {
   humidity: environmentByDays_;
 };
 
-export type controlPanel = {
-  light: boolean;
-  heater: boolean;
+export type switch_ = {
+  id: number;
+  switchName: string;
+  state: boolean;
 };
 
 export type contextType_ = {
@@ -21,8 +22,8 @@ export type contextType_ = {
   resetBilgeStatus: () => void;
   changeSelected: (selected: boolean, str: string) => void;
   setSelectedControl: (str: string | undefined) => void;
-  controlPanelChange: (val: Partial<controlPanel>) => void;
+  onSwitchChange: (val: switch_) => void;
   data: data_;
-  controlPanel: controlPanel;
+  controlPanel: switch_[];
   selectedControl: string | undefined;
 };

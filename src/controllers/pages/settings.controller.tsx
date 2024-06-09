@@ -5,7 +5,7 @@ import SettingsComponent from "../../components/settingsComponent";
 
 export const Context = createContext<contextType_ | null>(null);
 
-function SettingsPagesController() {
+export const SettingsPagesController = () => {
 	const [data, setData] = useState<data_>({
 		ssid: "",
 		pwd: "",
@@ -33,6 +33,4 @@ function SettingsPagesController() {
 			<SettingsComponent />
 		</Context.Provider>
 	);
-}
-
-export default SettingsPagesController;
+};

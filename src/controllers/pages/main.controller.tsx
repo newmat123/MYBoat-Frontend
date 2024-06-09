@@ -6,7 +6,7 @@ import MainComponent from "../../components/mainComponent";
 
 export const Context = createContext<contextType_ | null>(null);
 
-function MainPagesController() {
+export const MainPagesController = () => {
 	const [data, setData] = useState<data_>({
 		bilgeStatus: undefined,
 		temperature: undefined,
@@ -15,6 +15,7 @@ function MainPagesController() {
 	});
 
 	const [selectedControl, setSelectedControl] = useState<string | undefined>();
+	const [waitingForRes, setWaitingForRes] = useState(false);
 	const [controlPanel, setControlPanel] = useState<switch_[]>([
 		{
 			id: 0,
@@ -96,10 +97,12 @@ function MainPagesController() {
 			)
 		);
 
+		setWaitingForRes(true);
 		const res = await API.postControlPanel(concreteSwitch);
 		if (!res) {
 			setControlPanel(originalControlPanel);
 		}
+		setWaitingForRes(false);
 	};
 
 	const context = {
@@ -114,6 +117,7 @@ function MainPagesController() {
 		data,
 		controlPanel,
 		selectedControl,
+		waitingForRes,
 	};
 
 	return (
@@ -121,6 +125,4 @@ function MainPagesController() {
 			<MainComponent />
 		</Context.Provider>
 	);
-}
-
-export default MainPagesController;
+};

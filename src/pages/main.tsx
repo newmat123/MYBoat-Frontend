@@ -1,4 +1,4 @@
-import MainPagesController from "../controllers/pages/main.controller";
+import { MainPagesController } from "../controllers/pages/main.controller";
 
 function Main() {
 	return (

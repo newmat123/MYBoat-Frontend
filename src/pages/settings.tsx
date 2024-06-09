@@ -1,4 +1,4 @@
-import SettingsPagesController from "../controllers/pages/settings.controller";
+import { SettingsPagesController } from "../controllers/pages/settings.controller";
 
 function Settings() {
 	return (

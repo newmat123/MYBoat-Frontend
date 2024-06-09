@@ -26,4 +26,5 @@ export type contextType_ = {
   data: data_;
   controlPanel: switch_[];
   selectedControl: string | undefined;
+  waitingForRes: boolean;
 };

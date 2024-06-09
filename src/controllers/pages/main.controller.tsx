@@ -87,15 +87,16 @@ function MainPagesController() {
 		}
 	};
 
-	const onSwitchChange = async (val: switch_) => {
+	const onSwitchChange = async (concreteSwitch: switch_) => {
 		const originalControlPanel = controlPanel;
 
-		setControlPanel((prev) => Object.assign(prev, val));
+		setControlPanel((prevSwitches) =>
+			prevSwitches.map((switchItem) =>
+				switchItem.id === concreteSwitch.id ? concreteSwitch : switchItem
+			)
+		);
 
-		const res = await API.postControlPanel(val);
-
-		console.log("res");
-		console.log(res);
+		const res = await API.postControlPanel(concreteSwitch);
 		if (!res) {
 			setControlPanel(originalControlPanel);
 		}

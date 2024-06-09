@@ -1,9 +1,11 @@
 import axios from "axios";
 import { CapacitorWifiConnect } from "@falconeta/capacitor-wifi-connect";
 
-var url_ = process.env.REACT_APP_EXSPRESS_BACKEND;
+var url_ = process.env.REACT_APP_TEST_URL; //REACT_APP_EXSPRESS_BACKEND;
+var autoConnect = true;
 
 const updateConnection = async () => {
+  autoConnect = false;
   if (process.env.REACT_APP_SOFT_AP_SSID === undefined) {
     throw new Error("REACT_APP_SOFT_AP_SSID is not defined in .env.local");
   }
@@ -15,15 +17,12 @@ const updateConnection = async () => {
   const currentSsid = await CapacitorWifiConnect.getDeviceSSID(); // Maybe getAppSSID
   if (currentSsid.value === process.env.REACT_APP_SOFT_AP_SSID) {
     url_ = process.env.REACT_APP_SOFT_AP;
-    console.log("eeee: " + url_);
-
     return;
   }
 
   const ssid = await CapacitorWifiConnect.getSSIDs();
   if (!ssid.value.includes(process.env.REACT_APP_SOFT_AP_SSID)) {
-    url_ = process.env.REACT_APP_EXSPRESS_BACKEND;
-    console.log("aaaa: " + url_);
+    url_ = process.env.REACT_APP_TEST_URL; //REACT_APP_EXSPRESS_BACKEND;
     return;
   }
 
@@ -39,7 +38,6 @@ const updateConnection = async () => {
       url_ = process.env.REACT_APP_SOFT_AP_SSID;
     }
   });
-  console.log("fffff: " + url_);
   // CapacitorWifiConnect.secureConnect({
   //   ssid: process.env.REACT_APP_SOFT_AP_SSID,
   //   password: process.env.REACT_APP_SOFT_AP_PASSWORD,
@@ -52,7 +50,7 @@ const updateConnection = async () => {
 };
 
 export const serverApi = () => {
-  updateConnection();
+  autoConnect && updateConnection();
   console.log("url: " + url_);
   return axios.create({
     baseURL: url_,

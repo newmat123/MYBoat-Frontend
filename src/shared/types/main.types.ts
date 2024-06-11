@@ -22,6 +22,7 @@ export type contextType_ = {
   resetBilgeStatus: () => void;
   changeSelected: (selected: boolean, str: string) => void;
   setSelectedControl: (str: string | undefined) => void;
+  getControlPanel: () => void;
   onSwitchChange: (val: switch_) => void;
   data: data_;
   controlPanel: switch_[];

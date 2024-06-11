@@ -60,7 +60,11 @@ function MainComponent() {
 			<section id="displayDataPortal"></section>
 
 			<YScrollContainer>
-				<ControlBox title="Panel" icon={faGamepad}>
+				<ControlBox
+					title="Panel"
+					icon={faGamepad}
+					onOpen={context?.getControlPanel}
+				>
 					<ControlPanel />
 				</ControlBox>
 

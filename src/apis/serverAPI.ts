@@ -111,7 +111,24 @@ export const API = {
       return undefined;
     }
   },
-  postControlPanel: async function (
+  getControlPanel: async function (cancel = false) {
+    try {
+      const response = await serverApi().request({
+        url: "/controlPanel",
+        method: "GET",
+        signal: cancel
+          ? cancelApiObject[
+              this.getControlPanel.name
+            ].handleRequestCancellation().signal
+          : undefined,
+      });
+      return response.data;
+    } catch {
+      console.log("couldn't fetch controlPanel");
+      return undefined;
+    }
+  },
+  putSwitch: async function (
     concreteSwitch: switch_,
     cancel = false
   ) {
@@ -125,7 +142,7 @@ export const API = {
         data: concreteSwitch,
         signal: cancel
           ? cancelApiObject[
-              this.postControlPanel.name
+              this.putSwitch.name
             ].handleRequestCancellation().signal
           : undefined,
       });

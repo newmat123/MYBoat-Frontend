@@ -7,9 +7,10 @@ export const ControlPanel = (props: {}) => {
 	const context = useContext(Context);
 
 	useEffect(() => {
+		//using portal so no unmount and mount
 		console.log("controlPanel");
 		console.log(context?.controlPanel);
-	}, [context?.controlPanel]);
+	}, []);
 	return (
 		<div className=" text-center">
 			<h1>Kontrol panel</h1>

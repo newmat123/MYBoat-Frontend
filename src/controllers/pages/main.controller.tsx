@@ -16,28 +16,9 @@ export const MainPagesController = () => {
 
 	const [selectedControl, setSelectedControl] = useState<string | undefined>();
 	const [waitingForRes, setWaitingForRes] = useState(false);
-	const [controlPanel, setControlPanel] = useState<switch_[]>([
-		{
-			id: 0,
-			switchName: "switch1",
-			state: false,
-		},
-		{
-			id: 1,
-			switchName: "switch2",
-			state: false,
-		},
-		{
-			id: 2,
-			switchName: "switch3",
-			state: false,
-		},
-		{
-			id: 3,
-			switchName: "switch4",
-			state: false,
-		},
-	]);
+
+	// get switches from client instead
+	const [controlPanel, setControlPanel] = useState<switch_[]>([]);
 
 	const resetBilgeStatus = async () => {
 		console.log("resetWarning handler was called!");
@@ -88,6 +69,15 @@ export const MainPagesController = () => {
 		}
 	};
 
+	const getControlPanel = async () => {
+		API.getControlPanel().then((res) => {
+			console.log("res------");
+			console.log(res);
+
+			setControlPanel(res);
+		});
+	};
+
 	const onSwitchChange = async (concreteSwitch: switch_) => {
 		const originalControlPanel = controlPanel;
 
@@ -98,7 +88,7 @@ export const MainPagesController = () => {
 		);
 
 		setWaitingForRes(true);
-		const res = await API.postControlPanel(concreteSwitch);
+		const res = await API.putSwitch(concreteSwitch);
 		if (!res) {
 			setControlPanel(originalControlPanel);
 		}
@@ -113,6 +103,7 @@ export const MainPagesController = () => {
 		resetBilgeStatus,
 		changeSelected,
 		setSelectedControl,
+		getControlPanel,
 		onSwitchChange,
 		data,
 		controlPanel,

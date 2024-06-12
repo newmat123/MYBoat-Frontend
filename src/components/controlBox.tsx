@@ -22,7 +22,7 @@ function ControlBox(props: {
 					className="flex flex-col w-24 h-24 my-2 rounded-md justify-center p-2"
 					onClick={() => {
 						context?.changeSelected(selected, props.title);
-						props.onOpen && props.onOpen();
+						props.onOpen && !selected && props.onOpen();
 					}}
 					style={{
 						backgroundColor: selected ? "#00AA00" : "#006700",

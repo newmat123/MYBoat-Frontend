@@ -15,9 +15,7 @@ export const MainPagesController = () => {
 	});
 
 	const [selectedControl, setSelectedControl] = useState<string | undefined>();
-	const [waitingForRes, setWaitingForRes] = useState(false);
-
-	// get switches from client instead
+	const [fetchingData, setFetchingData] = useState(false);
 	const [controlPanel, setControlPanel] = useState<switch_[]>([]);
 
 	const resetBilgeStatus = async () => {
@@ -87,12 +85,12 @@ export const MainPagesController = () => {
 			)
 		);
 
-		setWaitingForRes(true);
+		setFetchingData(true);
 		const res = await API.putSwitch(concreteSwitch);
 		if (!res) {
 			setControlPanel(originalControlPanel);
 		}
-		setWaitingForRes(false);
+		setFetchingData(false);
 	};
 
 	const context = {
@@ -108,7 +106,7 @@ export const MainPagesController = () => {
 		data,
 		controlPanel,
 		selectedControl,
-		waitingForRes,
+		fetchingData,
 	};
 
 	return (

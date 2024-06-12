@@ -5,14 +5,8 @@ import { switch_ } from "../shared/types/main.types";
 
 export const ControlPanel = (props: {}) => {
 	const context = useContext(Context);
-
-	useEffect(() => {
-		//using portal so no unmount and mount
-		console.log("controlPanel");
-		console.log(context?.controlPanel);
-	}, []);
 	return (
-		<div className=" text-center">
+		<div className=" text-center font-bold">
 			<h1>Kontrol panel</h1>
 
 			<div className="grid grid-cols-2 gap-3 m-7">
@@ -21,7 +15,7 @@ export const ControlPanel = (props: {}) => {
 						key={sw.id}
 						concreteSwitch={sw}
 						onSwitchChange={context?.onSwitchChange}
-						disabled={context?.waitingForRes}
+						disabled={context?.fetchingData}
 					/>
 				))}
 			</div>
@@ -35,9 +29,9 @@ const PanelSwitch = (props: {
 	disabled: boolean;
 }) => {
 	return (
-		<div className=" flex justify-center bg-[#383838] p-3 m-auto rounded-xl shadow-inner">
+		<div className=" flex justify-center align-middle font-bold bg-[#383838] p-3 m-auto rounded-xl shadow-inner">
 			<Switch
-				value={props.concreteSwitch.state}
+				checked={props.concreteSwitch.state}
 				disabled={props.disabled}
 				onChange={() =>
 					props.onSwitchChange({
@@ -46,7 +40,7 @@ const PanelSwitch = (props: {
 					})
 				}
 			/>
-			{props.concreteSwitch.switchName}
+			{props.concreteSwitch.name}
 		</div>
 	);
 };

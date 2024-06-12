@@ -10,7 +10,7 @@ export type data_ = {
 
 export type switch_ = {
   id: number;
-  switchName: string;
+  name: string;
   state: boolean;
 };
 
@@ -27,5 +27,5 @@ export type contextType_ = {
   data: data_;
   controlPanel: switch_[];
   selectedControl: string | undefined;
-  waitingForRes: boolean;
+  fetchingData: boolean;
 };

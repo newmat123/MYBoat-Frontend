@@ -10,7 +10,7 @@ export const ControlPanel = (props: {}) => {
 			<h1>Kontrol panel</h1>
 
 			<div className="grid grid-cols-2 gap-3 m-7">
-				{context?.controlPanel.map((sw) => (
+				{context?.controlPanel?.map((sw) => (
 					<PanelSwitch
 						key={sw.id}
 						concreteSwitch={sw}

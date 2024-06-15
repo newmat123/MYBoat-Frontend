@@ -16,10 +16,9 @@ export const MainPagesController = () => {
 
 	const [selectedControl, setSelectedControl] = useState<string | undefined>();
 	const [fetchingData, setFetchingData] = useState(false);
-	const [controlPanel, setControlPanel] = useState<switch_[]>([]);
+	const [controlPanel, setControlPanel] = useState<switch_[]>();
 
 	const resetBilgeStatus = async () => {
-		console.log("resetWarning handler was called!");
 		const bilgeStatus = await API.resetBilgeStatus();
 		setData((prev) => ({
 			...prev,
@@ -69,18 +68,18 @@ export const MainPagesController = () => {
 
 	const getControlPanel = async () => {
 		API.getControlPanel().then((res) => {
-			console.log("res------");
-			console.log(res);
-
 			setControlPanel(res);
 		});
 	};
 
 	const onSwitchChange = async (concreteSwitch: switch_) => {
+		if (controlPanel === undefined) {
+			return;
+		}
 		const originalControlPanel = controlPanel;
 
-		setControlPanel((prevSwitches) =>
-			prevSwitches.map((switchItem) =>
+		setControlPanel(
+			controlPanel.map((switchItem) =>
 				switchItem.id === concreteSwitch.id ? concreteSwitch : switchItem
 			)
 		);

@@ -25,7 +25,7 @@ export type contextType_ = {
   getControlPanel: () => void;
   onSwitchChange: (val: switch_) => void;
   data: data_;
-  controlPanel: switch_[];
+  controlPanel: switch_[] | undefined;
   selectedControl: string | undefined;
   fetchingData: boolean;
 };

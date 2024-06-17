@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CapacitorWifiConnect } from "@falconeta/capacitor-wifi-connect";
 
-var url_ = process.env.REACT_APP_TEST_URL; //REACT_APP_EXSPRESS_BACKEND;
+var url_ = process.env.REACT_APP_EXSPRESS_BACKEND; //REACT_APP_TEST_URL;
 var autoConnect = true;
 
 const updateConnection = async () => {
@@ -22,7 +22,7 @@ const updateConnection = async () => {
 
   const ssid = await CapacitorWifiConnect.getSSIDs();
   if (!ssid.value.includes(process.env.REACT_APP_SOFT_AP_SSID)) {
-    url_ = process.env.REACT_APP_TEST_URL; //REACT_APP_EXSPRESS_BACKEND;
+    url_ = process.env.REACT_APP_EXSPRESS_BACKEND; //REACT_APP_TEST_URL;
     return;
   }
 

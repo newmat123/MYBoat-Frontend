@@ -67,7 +67,7 @@ export const MainPagesController = () => {
 	};
 
 	const getControlPanel = async () => {
-		API.getControlPanel().then((res) => {
+		API.getSwitches().then((res) => {
 			setControlPanel(res);
 		});
 	};
@@ -76,15 +76,15 @@ export const MainPagesController = () => {
 		if (controlPanel === undefined) {
 			return;
 		}
-		const originalControlPanel = controlPanel;
+		setFetchingData(true);
 
+		const originalControlPanel = controlPanel;
 		setControlPanel(
 			controlPanel.map((switchItem) =>
 				switchItem.id === concreteSwitch.id ? concreteSwitch : switchItem
 			)
 		);
 
-		setFetchingData(true);
 		const res = await API.putSwitch(concreteSwitch);
 		if (!res) {
 			setControlPanel(originalControlPanel);

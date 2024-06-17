@@ -111,20 +111,20 @@ export const API = {
       return undefined;
     }
   },
-  getControlPanel: async function (cancel = false) {
+  getSwitches: async function (cancel = false) {
     try {
       const response = await serverApi().request({
-        url: "/controlPanel",
+        url: "/switches",
         method: "GET",
         signal: cancel
           ? cancelApiObject[
-              this.getControlPanel.name
+              this.getSwitches.name
             ].handleRequestCancellation().signal
           : undefined,
       });
       return response.data;
     } catch {
-      console.log("couldn't fetch controlPanel");
+      console.log("couldn't fetch switches");
       return undefined;
     }
   },

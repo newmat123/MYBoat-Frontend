@@ -12,7 +12,7 @@ export const ControlPanel = (props: {}) => {
 			<div className="grid grid-cols-2 gap-3 m-7">
 				{context?.controlPanel?.map((sw) => (
 					<PanelSwitch
-						key={sw.id}
+						key={sw.switchId}
 						concreteSwitch={sw}
 						onSwitchChange={context?.onSwitchChange}
 						disabled={context?.fetchingData}

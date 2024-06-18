@@ -9,7 +9,7 @@ export type data_ = {
 };
 
 export type switch_ = {
-  id: number;
+  switchId: number;
   name: string;
   state: boolean;
 };

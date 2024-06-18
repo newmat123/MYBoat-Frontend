@@ -81,7 +81,9 @@ export const MainPagesController = () => {
 		const originalControlPanel = controlPanel;
 		setControlPanel(
 			controlPanel.map((switchItem) =>
-				switchItem.id === concreteSwitch.id ? concreteSwitch : switchItem
+				switchItem.switchId === concreteSwitch.switchId
+					? concreteSwitch
+					: switchItem
 			)
 		);
 

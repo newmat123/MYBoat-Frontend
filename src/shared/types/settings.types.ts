@@ -8,5 +8,8 @@ export type data_ = {
 export type contextType_ = {
   handleSubmit: () => void;
   handleOnchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  displayWify: boolean;
+  wifiStatus: boolean;
+  espTime: string|undefined;
   data: data_;
 };

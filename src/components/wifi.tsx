@@ -20,7 +20,7 @@ function WifiConnect() {
 								type="text"
 								name="ssid"
 								onChange={context?.handleOnchange}
-								className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+								className="text-md text-gray-700 block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
 							/>
 						</div>
 						<div className="py-1">
@@ -31,7 +31,7 @@ function WifiConnect() {
 								type="password"
 								name="pwd"
 								onChange={context?.handleOnchange}
-								className="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
+								className="text-md text-gray-700 block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 placeholder-gray-600 shadow-md focus:placeholder-gray-500 focus:bg-white focus:border-gray-600 focus:outline-none"
 							/>
 						</div>
 

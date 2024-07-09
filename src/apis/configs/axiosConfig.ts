@@ -50,7 +50,8 @@ const updateConnection = async () => {
 };
 
 export const serverApi = () => {
-  autoConnect && updateConnection();
+  //autoConnect && 
+  updateConnection();
   console.log("url: " + url_);
   return axios.create({
     baseURL: url_,

@@ -153,40 +153,66 @@ export const API = {
     }
   },
 
-  // getWifiStatus: async function (cancel = false) {
-  //   const response = await api.request({
-  //     url: "/wifiStatus",
-  //     method: "GET",
-  //     signal: cancel
-  //       ? cancelApiObject[this.getWifiStatus.name].handleRequestCancellation()
-  //           .signal
-  //       : undefined,
-  //   });
-  //   return response.data.value;
-  // },
-  // postWifiCredentials: async function (
-  //   ssid_: string,
-  //   pwd_: String,
-  //   cancel = false
-  // ) {
-  //   const response = await api.request({
-  //     url: "/wifi",
-  //     method: "POST",
-  //     data: {
-  //       SSID: ssid_,
-  //       PWD: pwd_,
-  //     },
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //     signal: cancel
-  //       ? cancelApiObject[
-  //           this.postWifiCredentials.name
-  //         ].handleRequestCancellation().signal
-  //       : undefined,
-  //   });
-  //   return response.data;
-  // },
+  getWifiStatus: async function (cancel = false) {
+    const response = await serverApi().request({
+      url: "/wifiStatus",
+      method: "GET",
+      signal: cancel
+        ? cancelApiObject[this.getWifiStatus.name].handleRequestCancellation()
+            .signal
+        : undefined,
+    });
+    return response.data;
+  },
+  putWifiCredentials: async function (
+    ssid_: string,
+    pwd_: String,
+    cancel = false
+  ) {
+    const response = await serverApi().request({
+      url: "/clientWifi",
+      method: "PUT",
+      data: {
+        SSID: ssid_,
+        PWD: pwd_,
+      },
+      headers: {
+        "content-type": "application/json",
+      },
+      signal: cancel
+        ? cancelApiObject[
+            this.putWifiCredentials.name
+          ].handleRequestCancellation().signal
+        : undefined,
+    });
+    return response.data;
+  },
+  putTime: async function (
+    dateTime: Date,
+    cancel = false
+  ) {
+    const response = await serverApi().request({
+      url: "/setTime",
+      method: "PUT",
+      data: {
+        year: dateTime.getFullYear(),
+        month: dateTime.getMonth(),
+        day: dateTime.getDay(),
+        h: dateTime.getHours(),
+        m: dateTime.getMinutes(),
+        s: dateTime.getSeconds()
+      },
+      headers: {
+        "content-type": "application/json",
+      },
+      signal: cancel
+        ? cancelApiObject[
+            this.putTime.name
+          ].handleRequestCancellation().signal
+        : undefined,
+    });
+    return response.data;
+  },
 };
 
 // defining the cancel API object for ProductAPI

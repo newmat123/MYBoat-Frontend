@@ -45,7 +45,6 @@ REACT_APP_EXSPRESS_BACKEND="http://.."
 REACT_APP_SOFT_AP="http://.."
 REACT_APP_SOFT_AP_SSID=""
 REACT_APP_SOFT_AP_PASSWORD=""
-REACT_APP_TEST_URL="http://.."
 
 ### `capacitorjs workflow`
 

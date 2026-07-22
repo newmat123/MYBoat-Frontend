@@ -3,6 +3,7 @@ import { createContext, useState } from "react";
 import { API } from "../../apis/serverAPI";
 import { contextType_, data_, switch_ } from "../../shared/types/main.types";
 import MainComponent from "../../components/mainComponent";
+import { cancelAnchorReminder, scheduleAnchorReminder } from "../../apis/utils";
 
 export const Context = createContext<contextType_ | null>(null);
 
@@ -90,6 +91,13 @@ export const MainPagesController = () => {
 		const res = await API.putSwitch(concreteSwitch);
 		if (!res) {
 			setControlPanel(originalControlPanel);
+		}
+		if (concreteSwitch.switchId === 4) {
+			if (concreteSwitch.state) {
+				await scheduleAnchorReminder(concreteSwitch.switchId);
+			} else {
+				await cancelAnchorReminder(concreteSwitch.switchId);
+			}
 		}
 		setFetchingData(false);
 	};
